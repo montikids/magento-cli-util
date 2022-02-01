@@ -1,0 +1,39 @@
+{
+    "name": "montikids/cli-magento-configure",
+    "description": "Magento CLI UTIL",
+    "type": "magento2-component",
+    "require": {
+        "symfony/console": ">4.0",
+        "symfony/yaml": ">3.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "app/"
+        }
+    },
+    "extra": {
+        "map": [
+            [
+                "bin",
+                "cli_util/bin"
+            ],
+            [
+                "configs",
+                "cli_util/configs"
+            ],
+            [
+                "README.md",
+                "cli_util/README.md"
+            ],
+            [
+                ".gitignore_project",
+                "cli_util/.gitignore"
+            ]
+        ]
+    },
+    "scripts": {
+        "post-install-cmd": [
+            "chmod +x ../../../cli_util/bin/n98-magerun2.phar"
+        ]
+    }
+}

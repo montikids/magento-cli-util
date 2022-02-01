@@ -1,0 +1,14 @@
+#!/usr/bin/env php
+<?php
+require_once __DIR__ . '/../../vendor/autoload.php';
+
+use Symfony\Component\Console\Application;
+use App\Commands\PrepareDbCommand;
+use App\Commands\AnonymizeCommand;
+use App\Commands\ConfigureEnvVariable;
+
+$app = new Application();
+$app->add(new PrepareDbCommand());
+$app->add(new AnonymizeCommand());
+$app->add(new ConfigureEnvVariable());
+$app->run();

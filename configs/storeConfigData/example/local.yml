@@ -1,0 +1,33 @@
+config:
+  default:
+    0:
+      web/unsecure/base_url: 'http://m2-sample.loc/'
+      web/secure/base_url: 'http://m2-sample.loc/'
+      admin/security/password_lifetime: 9000
+      smtp/developer/developer_mode: '0'
+      smtp/configuration_option/host: 'localhost'
+      smtp/configuration_option/port: '1025'
+      smtp/configuration_option/protocol:
+        delete: true
+      smtp/configuration_option/username:
+        delete: true
+      smtp/configuration_option/password:
+        delete: true
+      smtp/configuration_option/authentication:
+        delete: true
+      web/secure/use_in_adminhtml:
+        delete: true
+      admin/url/custom:
+        delete: true
+      admin/url/use_custom:
+        delete: true
+      admin/url/use_custom_path:
+        delete: true
+  stores:
+    0:
+      web/secure/base_url:
+        delete: true
+      web/unsecure/base_url:
+        delete: true
+magerun2_run:
+  custom_admin_pass: admin:user:change-password admin admin1234

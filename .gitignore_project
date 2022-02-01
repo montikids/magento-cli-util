@@ -1,0 +1,6 @@
+/app/
+/bin/
+README.md
+/configs/anonymize/example
+/configs/storeConfigData/example
+/configs/storeConfigData/local.yml

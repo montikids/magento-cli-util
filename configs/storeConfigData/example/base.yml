@@ -1,0 +1,27 @@
+config:
+  default:
+    0:
+      web/secure/use_in_frontend:
+        delete: true
+      web/secure/use_in_adminhtml:
+        delete: true
+      payment/mr_quadpay/client_id: 'here_id'
+      payment/mr_quadpay/client_secret:
+        encrypt: 'here_token'
+      payment/stripe_payments_basic/stripe_mode: 'test'
+      payment/mr_quadpay/debug: '1'
+      payment/mr_quadpay/sandbox_flag: '1'
+      smtp/developer/developer_mode: '1'
+  stores:
+    1:
+      payment/stripe_payments_sepa/business_name:
+        delete: true
+  websites:
+    1:
+      design/head/includes: ''
+sql_query: # applying DB SQL queries
+#  alias_name: 'UPDATE table SET column=....'
+  clean_report: 'DELETE FROM reporting_users'
+magerun2_run:
+  #  alias_name: '[command]'
+  cache_clean: 'cache:clean'
