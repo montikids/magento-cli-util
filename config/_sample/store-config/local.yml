@@ -1,0 +1,38 @@
+config:
+  default:
+    0:
+      ### Base ###
+      web/unsecure/base_url: 'http://magento.test/'
+      web/secure/base_url: 'https://magento.test/'
+
+      ### Mail ###
+      smtp/developer/developer_mode: '0'
+      smtp/configuration_option/host: 'localhost'
+      smtp/configuration_option/port: '1025'
+      smtp/configuration_option/protocol:
+        delete: true
+      smtp/configuration_option/username:
+        delete: true
+      smtp/configuration_option/password:
+        delete: true
+      smtp/configuration_option/authentication:
+        delete: true
+      web/secure/use_in_frontend: '1'
+      web/secure/use_in_adminhtml: '1'
+
+      ### Admin ###
+      admin/url/custom: 'https://montikids.test/'
+      admin/url/use_custom: '1'
+      admin/url/use_custom_path: '0'
+      admin/security/password_lifetime: ''
+      admin/security/password_is_forced: '0'
+
+  stores:
+    0:
+      web/secure/base_url:
+        delete: true
+      web/unsecure/base_url:
+        delete: true
+
+sql_query:
+  clean_report: 'DELETE FROM reporting_users'

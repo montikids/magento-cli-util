@@ -1,0 +1,32 @@
+config:
+  default:
+    0:
+      admin/security/password_lifetime: 9000
+
+      ### HTTPS ###
+      web/secure/use_in_frontend:
+        delete: true
+      web/secure/use_in_adminhtml:
+        delete: true
+
+      ### Mail ###
+      system/smtp/disable: '1'
+      system/smtp/host:
+        delete: true
+      system/smtp/port:
+        delete: true
+
+  stores:
+    1:
+      payment/stripe_payments_sepa/business_name:
+        delete: true
+
+  websites:
+    1:
+      design/head/includes: ''
+
+sql_query:
+  clean_report: 'DELETE FROM reporting_users'
+
+n98_magerun2_command:
+  cache_clean: 'cache:clean'

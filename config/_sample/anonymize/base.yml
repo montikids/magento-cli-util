@@ -1,0 +1,129 @@
+### Variables
+# You can use variables to avoid dummy copy-pasting some things and to simplify customizing values per environment and
+# team members
+###
+variable:
+  $ANONYMIZED_PASSWORD: 'Password123'
+  $ANONYMIZED_PHONE: '1234 5678'
+  $ANONYMIZED_FAX: '1234 5678'
+  $ANONYMIZED_MAIL: '@trash-mail.com'
+  $ANONYMIZED_STREET: ' test avenue'
+  $ANONYMIZED_IP: '0.0.0.0'
+
+### Anonymize patterns for specific table
+# table_name:
+#   - [
+#       REQUIRED: 1. Column name: valid field name. – Column to anonymize.
+#       OPTIONAL: 2. Column value/prefix: string or null. – The column new value. In case you concat any other data, consider it as prefix, otherwise – as a static value.
+#       OPTIONAL: 3. Field to concat - valid field name or null - DB field that would follow the prefix, second part of the generated data, dynamic
+#       OPTIONAL: 4. 'postfix' - string, third part of the generated data, static, can be empty string or null
+#       OPTIONAL: 5. 'is_password' - boolean, whether it's a password field, if it is, it would be encrypted and hashed according to Magento algorithms
+#       OPTIONAL: 6. 'concat_field_name' - boolean, whether you want to concat the field name to the end of the field content
+#   ]
+###
+config:
+  customer_entity:
+    - [ 'firstname', 'firstname_', 'entity_id', null, false, true ]
+    - [ 'lastname','lastname_', 'entity_id', null, false, true ]
+    - [ 'email', 'dev_', 'entity_id', '$ANONYMIZED_MAIL', false, true ]
+    - [ 'password_hash', '$ANONYMIZED_PASSWORD', null, null, true, true ]
+
+  customer_address_entity:
+    - [ 'firstname', 'firstname_', 'entity_id', '', false, true ]
+    - [ 'lastname', 'lastname_', 'entity_id', '', false, true ]
+    - [ 'street', '$ANONYMIZED_STREET', 'entity_id', '', false, false ]
+    - [ 'city', 'city_', 'entity_id', '', false, true ]
+    - [ 'telephone', '$ANONYMIZED_PHONE', 'entity_id', '', false, true ]
+    - [ 'fax', '$ANONYMIZED_FAX', 'entity_id', '', false, true ]
+
+  customer_grid_flat:
+    - [ 'name', 'name_', 'entity_id', '', false, true ]
+    - [ 'email', 'dev_', 'entity_id', '$ANONYMIZED_MAIL', false, true ]
+    - [ 'shipping_full', 'shipping_full_', 'entity_id', '', false, true ]
+    - [ 'billing_full', 'billing_full_', 'entity_id', '', false, true ]
+    - [ 'billing_firstname', 'billing_firstname_', 'entity_id', '', false, true ]
+    - [ 'billing_lastname', 'billing_lastname_', 'entity_id', '', false, true ]
+    - [ 'billing_telephone', '$ANONYMIZED_PHONE', 'entity_id', '', false, true ]
+    - [ 'billing_street', '$ANONYMIZED_STREET', 'entity_id', '', false, false ]
+    - [ 'billing_city', 'billing_city_', 'entity_id', '', false, true ]
+    - [ 'billing_company', 'billing_company_', 'entity_id', '', false, true ]
+
+  email_contact:
+    - [ 'email', 'dev_', 'email_contact_id', '$ANONYMIZED_MAIL', false, true ]
+
+  newsletter_subscriber:
+    - [ 'subscriber_email', 'dev_', 'subscriber_id', '$ANONYMIZED_MAIL', false, true ]
+
+  quote:
+    - [ 'customer_email', 'dev_', 'entity_id', '$ANONYMIZED_MAIL', false, true ]
+    - [ 'customer_firstname', 'customer_firstname_', 'entity_id', '', false, true ]
+    - [ 'customer_lastname', 'customer_lastname_', 'entity_id', '', false, true ]
+    - [ 'remote_ip', '$ANONYMIZE_IP', null, null, false, true ]
+
+  quote_address:
+    - [ 'email', 'dev_', 'address_id', '$ANONYMIZED_MAIL', false, true ]
+    - [ 'firstname', 'firstname_', 'address_id', '', false, true ]
+    - [ 'lastname', 'lastname_', 'address_id', '', false, true ]
+    - [ 'company', 'company_', 'address_id', '', false, true ]
+    - [ 'street', '$ANONYMIZED_STREET', 'address_id', '', false, false ]
+    - [ 'city', 'city_', 'address_id', '', false, true ]
+    - [ 'telephone', '$ANONYMIZED_PHONE', 'address_id', '', false, true ]
+    - [ 'fax', '$ANONYMIZED_FAX', 'address_id', '', false, true ]
+
+  sales_creditmemo_grid:
+    - [ 'billing_name', 'billing_name_', 'entity_id', '', false, true ]
+    - [ 'billing_address', 'billing_address_', 'entity_id', '', false, true ]
+    - [ 'shipping_address', 'shipping_address_', 'entity_id', '', false, true ]
+    - [ 'customer_name', 'customer_name_', 'entity_id', '', false, true ]
+    - [ 'customer_email', 'dev_', 'entity_id', '$ANONYMIZED_MAIL', false, true ]
+
+  sales_invoice_grid:
+    - [ 'billing_name', 'billing_name_', 'entity_id', '', false, true ]
+    - [ 'billing_address', 'billing_address_', 'entity_id', '', false, true ]
+    - [ 'shipping_address', 'shipping_address_', 'entity_id', '', false, true ]
+    - [ 'customer_name', 'customer_name_', 'entity_id', '', false, true ]
+    - [ 'customer_email', 'dev_', 'entity_id', '$ANONYMIZED_MAIL', false, true ]
+
+  sales_order:
+    - [ 'customer_email', 'dev_', 'entity_id', '$ANONYMIZED_MAIL', false, true ]
+    - [ 'customer_firstname', 'customer_firstname_', 'entity_id', '', false, true ]
+    - [ 'customer_lastname', 'customer_lastname_', 'entity_id', '', false, true ]
+
+  sales_order_address:
+    - [ 'lastname', 'lastname_', 'entity_id', '', false, true ]
+    - [ 'firstname', 'firstname_', 'entity_id', '', false, true ]
+    - [ 'street', '$ANONYMIZED_STREET', 'entity_id', '', false, false ]
+    - [ 'city', 'city_', 'entity_id', '', false, true ]
+    - [ 'email', 'dev_', 'entity_id', '$ANONYMIZED_MAIL', false, true ]
+    - [ 'telephone', '$ANONYMIZED_PHONE', 'entity_id', '', false, true ]
+    - [ 'company', 'company_', 'entity_id', '', false, true ]
+
+  sales_order_grid:
+    - [ 'billing_name', 'billing_name_', 'entity_id', '', false, true ]
+    - [ 'shipping_name', 'shipping_name_', 'entity_id', '', false, true ]
+    - [ 'billing_address', 'billing_address_', 'entity_id', '', false, true ]
+    - [ 'shipping_address', 'shipping_address_', 'entity_id', '', false, true ]
+    - [ 'customer_name', 'customer_name_', 'entity_id', '', false, true ]
+    - [ 'customer_email', 'dev_', 'entity_id', '$ANONYMIZED_MAIL', false, true ]
+
+  sales_shipment_grid:
+    - [ 'billing_name', 'billing_name_', 'entity_id', '', false, true ]
+    - [ 'shipping_name', 'shipping_name_', 'entity_id', '', false, true ]
+    - [ 'billing_address', 'billing_address_', 'entity_id', '', false, true ]
+    - [ 'shipping_address', 'shipping_address_', 'entity_id', '', false, true ]
+    - [ 'customer_name', 'customer_name_', 'entity_id', '', false, true ]
+    - [ 'customer_email', 'dev_', 'entity_id', '$ANONYMIZED_MAIL', false, true ]
+
+### Custom SQL queries
+# query_alias: 'SQL query'
+###
+sql_query:
+  clean_quote: 'DELETE FROM quote;'
+  truncate_admin_notice: "TRUNCATE adminnotification_inbox;"
+  truncate_reporting_users: "TRUNCATE reporting_users;"
+
+### N98 Magerun 2 util commands to run
+# command_alias: 'n98 command'
+###
+n98_magerun2_command:
+  cache_clean: 'cache:clean'

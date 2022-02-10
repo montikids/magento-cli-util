@@ -1,0 +1,13 @@
+variable:
+  $ANONYMIZED_PASSWORD: 'my_awesome_password'
+  $ANONYMIZED_MAIL: '@test.com'
+
+config:
+  customer_entity:
+    - [ 'firstname', 'John Doe ', 'entity_id', '', false, false ]
+
+sql_query:
+  truncate_admin_notice: "TRUNCATE customer_log"
+
+n98_magerun2_command:
+  cache_clean: 'cache:clean'

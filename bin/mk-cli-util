@@ -1,0 +1,16 @@
+#!/usr/bin/env php
+<?php
+declare(strict_types=1);
+
+if (!class_exists('Montikids\MagentoCliUtil\CliUtilBootstrap')) {
+    require_once __DIR__ . '/../src/CliUtilBootstrap.php';
+}
+
+use Montikids\MagentoCliUtil\CliUtilBootstrap;
+
+define('MK_CLI_UTIL_BIN_DIR', __DIR__);
+define('MK_VENDOR_ROOT', MK_CLI_UTIL_BIN_DIR . '/../../..');
+define('MK_MAGENTO_ROOT', MK_VENDOR_ROOT . '/..');
+
+$app = CliUtilBootstrap::createAndRunApplication();
+$app->run();

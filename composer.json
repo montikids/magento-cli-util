@@ -1,39 +1,53 @@
 {
-    "name": "montikids/cli-magento-configure",
-    "description": "Magento CLI UTIL",
+    "name": "montikids/magento-cli-util",
+    "description": "Symfony-based CLI tool for Magento developers",
+    "keywords": [
+        "Magento 2",
+        "cli",
+        "tool",
+        "database",
+        "anonymization",
+        "configuration"
+    ],
     "type": "magento2-component",
+    "license": "MIT",
+    "version": "dev-1.0.0",
+    "minimum-stability": "stable",
+    "authors": [
+        {
+            "name": "Vitalii Novakivskyi",
+            "email": "novakivskiy@gmail.com",
+            "role": "Developer",
+            "homepage": "https://github.com/novakivskiy"
+        },
+        {
+            "name": "Tymofii Maksymenko",
+            "email": "tim.off.max@gmail.com",
+            "role": "Developer",
+            "homepage": "https://github.com/timoffmax"
+        }
+    ],
     "require": {
+        "php": ">=7.2.0",
+        "ext-sodium": "*",
+        "ext-mysqli": "*",
         "symfony/console": ">4.0",
-        "symfony/yaml": ">3.3"
+        "symfony/yaml": ">3.3",
+        "n98/magerun2-dist": "^4.9",
+        "symfony/filesystem": "^5.4"
     },
     "autoload": {
         "psr-4": {
-            "App\\": "app/"
+            "Montikids\\MagentoCliUtil\\": "src/"
         }
     },
-    "extra": {
-        "map": [
-            [
-                "bin",
-                "cli_util/bin"
-            ],
-            [
-                "configs",
-                "cli_util/configs"
-            ],
-            [
-                "README.md",
-                "cli_util/README.md"
-            ],
-            [
-                ".gitignore_project",
-                "cli_util/.gitignore"
-            ]
-        ]
-    },
-    "scripts": {
-        "post-install-cmd": [
-            "chmod +x ../../../cli_util/bin/n98-magerun2.phar"
-        ]
+    "bin": [
+        "bin/mk-cli-util"
+    ],
+    "require-dev": {
+        "phpmd/phpmd": "@stable",
+        "squizlabs/php_codesniffer": ">=3.4",
+        "friendsofphp/php-cs-fixer": ">=2.13",
+        "phpstan/phpstan": ">=0.12.81"
     }
 }
