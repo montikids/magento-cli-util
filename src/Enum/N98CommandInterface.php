@@ -8,12 +8,6 @@ namespace Montikids\MagentoCliUtil\Enum;
  */
 interface N98CommandInterface
 {
-    public const ALL_COMMANDS = [
-        self::CONFIG_ENV_SHOW,
-        self::CONFIG_ENV_SET,
-        self::CACHE_CLEAN,
-    ];
-
     public const CONFIG_ENV_SHOW = 'config:env:show';
     public const CONFIG_ENV_SET = 'config:env:set';
 
