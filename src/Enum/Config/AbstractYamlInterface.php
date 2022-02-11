@@ -8,7 +8,6 @@ namespace Montikids\MagentoCliUtil\Enum\Config;
  */
 interface AbstractYamlInterface
 {
-    public const SECTION_CONFIG = 'config';
     public const SECTION_SQL_QUERY = 'sql_query';
     public const SECTION_N98_MAGERUN2_COMMAND = 'n98_magerun2_command';
 }

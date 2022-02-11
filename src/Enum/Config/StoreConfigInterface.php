@@ -4,11 +4,11 @@ declare(strict_types=1);
 namespace Montikids\MagentoCliUtil\Enum\Config;
 
 /**
- * TODO: Add description
+ * Describes store config updating config file structure
  */
 interface StoreConfigInterface extends AbstractYamlInterface
 {
-    public const PATH_DIR = 'config/store-config';
+    public const SECTION_CONFIG = 'config';
 
     public const ROOT_SECTIONS = [
         self::SECTION_CONFIG,
