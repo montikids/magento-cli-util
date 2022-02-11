@@ -64,9 +64,11 @@ class Connection
 
     /**
      * @param string $sql
+     * @param array $params
      * @return void
+     * @throws DatabaseException
      */
-    public function query(string $sql): void
+    public function query(string $sql, array $params = []): void
     {
         if (false === $this->queryClosed) {
             $this->query->close();
@@ -75,6 +77,26 @@ class Connection
         $this->query = $this->connection->prepare($sql);
 
         if (false !== $this->query) {
+            if (count($params) > 1) {
+                $types = '';
+                $args_ref = [];
+
+                foreach ($params as $k => &$arg) {
+                    if (is_array($params[$k])) {
+                        foreach ($params[$k] as $j => &$a) {
+                            $types .= $this->_getType($params[$k][$j]);
+                            $args_ref[] = &$a;
+                        }
+                    } else {
+                        $types .= $this->getType($params[$k]);
+                        $args_ref[] = &$arg;
+                    }
+                }
+
+                array_unshift($args_ref, $types);
+                call_user_func_array([$this->query, 'bind_param'], $args_ref);
+            }
+
             $this->query->execute();
 
             if (0 !== $this->query->errno) {
@@ -171,5 +193,23 @@ class Connection
     private function processCriticalError(string $error): void
     {
         throw new DatabaseException($error);
+    }
+
+    /**
+     * @param mixed $var
+     * @return string
+     * @deprecated Refactor
+     */
+    private function getType($var): string
+    {
+        if (is_string($var)) {
+            return 's';
+        } elseif (is_float($var)) {
+            return 'd';
+        } elseif (is_int($var)) {
+            return 'i';
+        }
+
+        return 'b';
     }
 }
