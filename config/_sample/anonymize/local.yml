@@ -1,13 +1,53 @@
-variable:
-  $ANONYMIZED_PASSWORD: 'my_awesome_password'
-  $ANONYMIZED_MAIL: '@test.com'
+# Variables are local to this config
+# You can't override base config variables
+variables:
+  - &customer_password 'my_awesome_password'
+  - &mail_domain '@test.com'
 
-config:
+tables:
+  # You can override any table specified in the base config
+  # Non-specified tables are inherited from the base config
   customer_entity:
-    - [ 'firstname', 'John Doe ', 'entity_id', '', false, false ]
+    # You can override any field
+    # Non-specified fields are inherited from the base config
+    firstname:
+      # You can override any field option
+      # Non-specified options are inherited from the base config
+      value: 'John '
+      field_to_concat: 'entity_id'
+    # You can't override variables, but you can override field options that use variables
+    email:
+      postfix: *mail_domain
+    password_hash:
+      value: *customer_password
+    # You can cancel a field anonymization by setting it to null
+    lastname: null
 
+  # You can cancel the whole table anonymization by setting it to null
+  customer_address_entity: null
+  customer_grid_flat: null
+  email_contact: null
+  newsletter_subscriber: null
+  quote_address: null
+  sales_creditmemo_grid: null
+  sales_invoice_grid: null
+  sales_order: null
+  sales_order_address: null
+  sales_order_grid: null
+  sales_shipment_grid: null
+
+# Non-specified queries are inherited from the base config
 sql_query:
-  truncate_admin_notice: "TRUNCATE customer_log"
+  # You can add any custom comSQL query you want executed
+  truncate_queue_message_status: 'TRUNCATE queue_message_status;'
+  truncate_queue_message: 'DELETE FROM queue_message;'
+  # You can cancel any custom SQL query specified in the base config by setting it to null
+  truncate_reporting_users: null
 
+# Non-specified commands are inherited from the base config
 n98_magerun2_command:
-  cache_clean: 'cache:clean'
+  # You can add any custom command you want executed
+  cache_flush: 'cache:flush'
+  # You can cancel running any command specified in the base config by setting it to null
+  cache_clean: null
+

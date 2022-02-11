@@ -2,117 +2,262 @@
 # You can use variables to avoid dummy copy-pasting some things and to simplify customizing values per environment and
 # team members
 ###
-variable:
-  $ANONYMIZED_PASSWORD: 'Password123'
-  $ANONYMIZED_PHONE: '1234 5678'
-  $ANONYMIZED_FAX: '1234 5678'
-  $ANONYMIZED_MAIL: '@trash-mail.com'
-  $ANONYMIZED_STREET: ' test avenue'
-  $ANONYMIZED_IP: '0.0.0.0'
+variables:
+  - &mail_domain '@trash-mail.com'
+  - &customer_password 'Password123'
+  - &customer_phone '1234 5678'
+  - &customer_fax '1234 5678'
+  - &customer_street ' test avenue'
+  - &ip '0.0.0.0'
 
 ### Anonymize patterns for specific table
 # table_name:
-#   - [
-#       REQUIRED: 1. Column name: valid field name. – Column to anonymize.
-#       OPTIONAL: 2. Column value/prefix: string or null. – The column new value. In case you concat any other data, consider it as prefix, otherwise – as a static value.
-#       OPTIONAL: 3. Field to concat - valid field name or null - DB field that would follow the prefix, second part of the generated data, dynamic
-#       OPTIONAL: 4. 'postfix' - string, third part of the generated data, static, can be empty string or null
-#       OPTIONAL: 5. 'is_password' - boolean, whether it's a password field, if it is, it would be encrypted and hashed according to Magento algorithms
-#       OPTIONAL: 6. 'concat_field_name' - boolean, whether you want to concat the field name to the end of the field content
-#   ]
+#   field_name:
+#     value (string|null|'') – column main value or prefix, if you concat it with either another field value, postfix, or both
+#       - use an empty string if you either want to clean the field or you don't need any prefix
+#       - null value sets the field to NULL, field_to_concat and postfix ignored
+#     field_to_concat (string|null) – another field name in the same table that you want to be concatenated to the primary value
+#       - null value means you don't want to concat any fields
+#     postfix (string|null) – some value you want being at the end of the field value
+#       - null value means you don't want to concat any fields
+#     is_password (bool) – treat the field as password: value is encrypted in the same way as customer password is
+#     concat_field_name (bool) – set to true if you want to concat name of the table field to the end of the value (after postfix)
 ###
-config:
+tables:
   customer_entity:
-    - [ 'firstname', 'firstname_', 'entity_id', null, false, true ]
-    - [ 'lastname','lastname_', 'entity_id', null, false, true ]
-    - [ 'email', 'dev_', 'entity_id', '$ANONYMIZED_MAIL', false, true ]
-    - [ 'password_hash', '$ANONYMIZED_PASSWORD', null, null, true, true ]
+    firstname:
+      value: 'firstname_'
+      field_to_concat: 'entity_id'
+    lastname:
+      value: 'firstname_'
+      field_to_concat: 'entity_id'
+    email:
+      value: 'dev_'
+      field_to_concat: 'entity_id'
+      postfix: *mail_domain
+    password_hash:
+      value: *customer_password
+      is_password: true
 
   customer_address_entity:
-    - [ 'firstname', 'firstname_', 'entity_id', '', false, true ]
-    - [ 'lastname', 'lastname_', 'entity_id', '', false, true ]
-    - [ 'street', '$ANONYMIZED_STREET', 'entity_id', '', false, false ]
-    - [ 'city', 'city_', 'entity_id', '', false, true ]
-    - [ 'telephone', '$ANONYMIZED_PHONE', 'entity_id', '', false, true ]
-    - [ 'fax', '$ANONYMIZED_FAX', 'entity_id', '', false, true ]
+    firstname:
+      value: 'firstname_'
+      field_to_concat: 'entity_id'
+    lastname:
+      value: 'lastname_'
+      field_to_concat: 'entity_id'
+    street:
+      value: *customer_street
+      field_to_concat: 'entity_id'
+    city:
+      value: 'city_'
+      field_to_concat: 'entity_id'
+    telephone:
+      value: *customer_phone
+      field_to_concat: 'entity_id'
+    fax:
+      value: *customer_fax
+      field_to_concat: 'entity_id'
 
   customer_grid_flat:
-    - [ 'name', 'name_', 'entity_id', '', false, true ]
-    - [ 'email', 'dev_', 'entity_id', '$ANONYMIZED_MAIL', false, true ]
-    - [ 'shipping_full', 'shipping_full_', 'entity_id', '', false, true ]
-    - [ 'billing_full', 'billing_full_', 'entity_id', '', false, true ]
-    - [ 'billing_firstname', 'billing_firstname_', 'entity_id', '', false, true ]
-    - [ 'billing_lastname', 'billing_lastname_', 'entity_id', '', false, true ]
-    - [ 'billing_telephone', '$ANONYMIZED_PHONE', 'entity_id', '', false, true ]
-    - [ 'billing_street', '$ANONYMIZED_STREET', 'entity_id', '', false, false ]
-    - [ 'billing_city', 'billing_city_', 'entity_id', '', false, true ]
-    - [ 'billing_company', 'billing_company_', 'entity_id', '', false, true ]
+    name:
+      value: 'name_'
+      field_to_concat: 'entity_id'
+    email:
+      value: 'dev_'
+      field_to_concat: 'entity_id'
+      postfix: *mail_domain
+    shipping_full:
+      value: 'shipping_full_'
+      field_to_concat: 'entity_id'
+    billing_full:
+      value: 'billing_full_'
+      field_to_concat: 'entity_id'
+    billing_firstname:
+      value: 'billing_firstname_'
+      field_to_concat: 'entity_id'
+    billing_lastname:
+      value: 'billing_lastname_'
+      field_to_concat: 'entity_id'
+    billing_telephone:
+      value: *customer_phone
+      field_to_concat: 'entity_id'
+    billing_street:
+      value: *customer_street
+      field_to_concat: 'entity_id'
+    billing_city:
+      value: 'billing_city_'
+      field_to_concat: 'entity_id'
+    billing_company:
+      value: 'billing_company_'
+      field_to_concat: 'entity_id'
 
   email_contact:
-    - [ 'email', 'dev_', 'email_contact_id', '$ANONYMIZED_MAIL', false, true ]
+    email:
+      value: 'dev_'
+      field_to_concat: 'email_contact_id'
+      postfix: *mail_domain
 
   newsletter_subscriber:
-    - [ 'subscriber_email', 'dev_', 'subscriber_id', '$ANONYMIZED_MAIL', false, true ]
+    subscriber_email:
+      value: 'dev_'
+      field_to_concat: 'subscriber_id'
+      postfix: *mail_domain
 
   quote:
-    - [ 'customer_email', 'dev_', 'entity_id', '$ANONYMIZED_MAIL', false, true ]
-    - [ 'customer_firstname', 'customer_firstname_', 'entity_id', '', false, true ]
-    - [ 'customer_lastname', 'customer_lastname_', 'entity_id', '', false, true ]
-    - [ 'remote_ip', '$ANONYMIZE_IP', null, null, false, true ]
+    customer_email:
+      value: 'dev_'
+      field_to_concat: 'entity_id'
+      postfix: *mail_domain
+    customer_firstname:
+      value: 'customer_firstname_'
+      field_to_concat: 'entity_id'
+    customer_lastname:
+      value: 'customer_lastname_'
+      field_to_concat: 'entity_id'
+    remote_ip:
+      value: *ip
 
   quote_address:
-    - [ 'email', 'dev_', 'address_id', '$ANONYMIZED_MAIL', false, true ]
-    - [ 'firstname', 'firstname_', 'address_id', '', false, true ]
-    - [ 'lastname', 'lastname_', 'address_id', '', false, true ]
-    - [ 'company', 'company_', 'address_id', '', false, true ]
-    - [ 'street', '$ANONYMIZED_STREET', 'address_id', '', false, false ]
-    - [ 'city', 'city_', 'address_id', '', false, true ]
-    - [ 'telephone', '$ANONYMIZED_PHONE', 'address_id', '', false, true ]
-    - [ 'fax', '$ANONYMIZED_FAX', 'address_id', '', false, true ]
+    email:
+      value: 'dev_'
+      field_to_concat: 'address_id'
+      postfix: *mail_domain
+    firstname:
+      value: 'firstname_'
+      field_to_concat: 'address_id'
+    lastname:
+      value: 'lastname_'
+      field_to_concat: 'address_id'
+    company:
+      value: 'company_'
+      field_to_concat: 'address_id'
+    street:
+      value: *customer_street
+      field_to_concat: 'address_id'
+    city:
+      value: 'city_'
+      field_to_concat: 'address_id'
+    telephone:
+      value: *customer_phone
+      field_to_concat: 'address_id'
+    fax:
+      value: *customer_fax
+      field_to_concat: 'address_id'
 
   sales_creditmemo_grid:
-    - [ 'billing_name', 'billing_name_', 'entity_id', '', false, true ]
-    - [ 'billing_address', 'billing_address_', 'entity_id', '', false, true ]
-    - [ 'shipping_address', 'shipping_address_', 'entity_id', '', false, true ]
-    - [ 'customer_name', 'customer_name_', 'entity_id', '', false, true ]
-    - [ 'customer_email', 'dev_', 'entity_id', '$ANONYMIZED_MAIL', false, true ]
+    billing_name:
+      value: 'billing_name_'
+      field_to_concat: 'entity_id'
+    billing_address:
+      value: 'billing_address_'
+      field_to_concat: 'entity_id'
+    shipping_address:
+      value: 'shipping_address_'
+      field_to_concat: 'entity_id'
+    customer_name:
+      value: 'customer_name_'
+      field_to_concat: 'entity_id'
+    customer_email:
+      value: 'dev_'
+      field_to_concat: 'entity_id'
+      postfix: *mail_domain
 
   sales_invoice_grid:
-    - [ 'billing_name', 'billing_name_', 'entity_id', '', false, true ]
-    - [ 'billing_address', 'billing_address_', 'entity_id', '', false, true ]
-    - [ 'shipping_address', 'shipping_address_', 'entity_id', '', false, true ]
-    - [ 'customer_name', 'customer_name_', 'entity_id', '', false, true ]
-    - [ 'customer_email', 'dev_', 'entity_id', '$ANONYMIZED_MAIL', false, true ]
+    billing_name:
+      value: 'billing_name_'
+      field_to_concat: 'entity_id'
+    billing_address:
+      value: 'billing_address_'
+      field_to_concat: 'entity_id'
+    shipping_address:
+      value: 'shipping_address_'
+      field_to_concat: 'entity_id'
+    customer_name:
+      value: 'customer_name_'
+      field_to_concat: 'entity_id'
+    customer_email:
+      value: 'dev_'
+      field_to_concat: 'entity_id'
+      postfix: *mail_domain
 
   sales_order:
-    - [ 'customer_email', 'dev_', 'entity_id', '$ANONYMIZED_MAIL', false, true ]
-    - [ 'customer_firstname', 'customer_firstname_', 'entity_id', '', false, true ]
-    - [ 'customer_lastname', 'customer_lastname_', 'entity_id', '', false, true ]
+    customer_email:
+      value: 'dev_'
+      field_to_concat: 'entity_id'
+      postfix: *mail_domain
+    customer_firstname:
+      value: 'customer_firstname_'
+      field_to_concat: 'entity_id'
+    customer_lastname:
+      value: 'customer_lastname_'
+      field_to_concat: 'entity_id'
 
   sales_order_address:
-    - [ 'lastname', 'lastname_', 'entity_id', '', false, true ]
-    - [ 'firstname', 'firstname_', 'entity_id', '', false, true ]
-    - [ 'street', '$ANONYMIZED_STREET', 'entity_id', '', false, false ]
-    - [ 'city', 'city_', 'entity_id', '', false, true ]
-    - [ 'email', 'dev_', 'entity_id', '$ANONYMIZED_MAIL', false, true ]
-    - [ 'telephone', '$ANONYMIZED_PHONE', 'entity_id', '', false, true ]
-    - [ 'company', 'company_', 'entity_id', '', false, true ]
+    email:
+      value: 'dev_'
+      field_to_concat: 'entity_id'
+      postfix: *mail_domain
+    firstname:
+      value: 'firstname_'
+      field_to_concat: 'entity_id'
+    lastname:
+      value: 'lastname_'
+      field_to_concat: 'entity_id'
+    company:
+      value: 'company_'
+      field_to_concat: 'entity_id'
+    street:
+      value: *customer_street
+      field_to_concat: 'entity_id'
+    city:
+      value: 'city_'
+      field_to_concat: 'entity_id'
+    telephone:
+      value: *customer_phone
+      field_to_concat: 'entity_id'
 
   sales_order_grid:
-    - [ 'billing_name', 'billing_name_', 'entity_id', '', false, true ]
-    - [ 'shipping_name', 'shipping_name_', 'entity_id', '', false, true ]
-    - [ 'billing_address', 'billing_address_', 'entity_id', '', false, true ]
-    - [ 'shipping_address', 'shipping_address_', 'entity_id', '', false, true ]
-    - [ 'customer_name', 'customer_name_', 'entity_id', '', false, true ]
-    - [ 'customer_email', 'dev_', 'entity_id', '$ANONYMIZED_MAIL', false, true ]
+    billing_name:
+      value: 'billing_name_'
+      field_to_concat: 'entity_id'
+    shipping_name:
+      value: 'shipping_name_'
+      field_to_concat: 'entity_id'
+    billing_address:
+      value: 'billing_address_'
+      field_to_concat: 'entity_id'
+    shipping_address:
+      value: 'shipping_address_'
+      field_to_concat: 'entity_id'
+    customer_name:
+      value: 'customer_name_'
+      field_to_concat: 'entity_id'
+    customer_email:
+      value: 'dev_'
+      field_to_concat: 'entity_id'
+      postfix: *mail_domain
 
   sales_shipment_grid:
-    - [ 'billing_name', 'billing_name_', 'entity_id', '', false, true ]
-    - [ 'shipping_name', 'shipping_name_', 'entity_id', '', false, true ]
-    - [ 'billing_address', 'billing_address_', 'entity_id', '', false, true ]
-    - [ 'shipping_address', 'shipping_address_', 'entity_id', '', false, true ]
-    - [ 'customer_name', 'customer_name_', 'entity_id', '', false, true ]
-    - [ 'customer_email', 'dev_', 'entity_id', '$ANONYMIZED_MAIL', false, true ]
+    billing_name:
+      value: 'billing_name_'
+      field_to_concat: 'entity_id'
+    shipping_name:
+      value: 'shipping_name_'
+      field_to_concat: 'entity_id'
+    billing_address:
+      value: 'billing_address_'
+      field_to_concat: 'entity_id'
+    shipping_address:
+      value: 'shipping_address_'
+      field_to_concat: 'entity_id'
+    customer_name:
+      value: 'customer_name_'
+      field_to_concat: 'entity_id'
+    customer_email:
+      value: 'dev_'
+      field_to_concat: 'entity_id'
+      postfix: *mail_domain
 
 ### Custom SQL queries
 # query_alias: 'SQL query'

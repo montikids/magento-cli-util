@@ -17,13 +17,6 @@ class StepAnonymizeTablesData
 {
     use OutputFormatTrait;
 
-    private const OPT_IDX_FIELD_NAME = 0;
-    private const OPT_IDX_VALUE = 1;
-    private const OPT_IDX_FIELD_TO_CONCAT = 2;
-    private const OPT_IDX_POSTFIX = 3;
-    private const OPT_IDX_IS_PASSWORD = 4;
-    private const OPT_IDX_CONCAT_FIELD_NAME = 5;
-
     /**
      * @var ValueEncryptor
      */
@@ -45,7 +38,7 @@ class StepAnonymizeTablesData
      */
     public function execute(array $config, OutputInterface $output): void
     {
-        $tablesToProcess = $config[AnonymizeInterface::SECTION_CONFIG] ?? [];
+        $tablesToProcess = $config[AnonymizeInterface::SECTION_TABLES] ?? [];
 
         if (false === empty($tablesToProcess)) {
             $this->printTitle('Anonymize tables data...', $output);
@@ -74,7 +67,7 @@ class StepAnonymizeTablesData
     }
 
     /**
-     * @param array<string, array<string, array<string|null|bool>>> $tables
+     * @param array<string, array<string, array<string|null|bool>|null>|null> $tables
      * @return array<string, string>
      * @throws InvalidConfigException
      */
@@ -83,15 +76,38 @@ class StepAnonymizeTablesData
         $result = [];
 
         foreach ($tables as $tableName => $columns) {
-            $columnExpressions = [];
+            $skipTable = (null === $columns);
 
-            foreach ($columns as $columnOptions) {
-                $columnExpression = $this->prepareColumnSetSql($columnOptions);
-                $columnExpressions[] = $columnExpression;
+            if (true === $skipTable) {
+                continue;
             }
 
+            $columnExpressions = $this->prepareColumnExpression($columns);
             $tableUpdateSql = $this->prepareTableUpdateSql($tableName, $columnExpressions);
             $result[$tableName] = $tableUpdateSql;
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param array $columns
+     * @return array
+     * @throws InvalidConfigException
+     */
+    private function prepareColumnExpression(array $columns): array
+    {
+        $result = [];
+
+        foreach ($columns as $fieldName => $columnOptions) {
+            $skipField = (null === $columnOptions);
+
+            if (true === $skipField) {
+                continue;
+            }
+
+            $columnExpression = $this->prepareColumnSetSql($fieldName, $columnOptions);
+            $result[] = $columnExpression;
         }
 
         return $result;
@@ -102,18 +118,15 @@ class StepAnonymizeTablesData
      * @return string
      * @throws InvalidConfigException
      */
-    private function prepareColumnSetSql(array $options): string
+    private function prepareColumnSetSql(string $fieldName, array $options): string
     {
-        $fieldName = $options[self::OPT_IDX_FIELD_NAME] ?? null;
-        $value = $options[self::OPT_IDX_VALUE] ?? null;
-        $fieldToConcat = $options[self::OPT_IDX_FIELD_TO_CONCAT] ?? null;
-        $postfix = $options[self::OPT_IDX_POSTFIX] ?? null;
-        $isPasswordField = $options[self::OPT_IDX_IS_PASSWORD] ?? false;
-        $concatFieldName = $options[self::OPT_IDX_CONCAT_FIELD_NAME] ?? false;
+        $this->validateOptionNamesWithException(array_keys($options));
 
-        if (null === $fieldName) {
-            throw new InvalidConfigException('Field name to anonymize must be specified explicitly');
-        }
+        $value = $options[AnonymizeInterface::FIELD_OPTION_VALUE] ?? null;
+        $fieldToConcat = $options[AnonymizeInterface::FILED_OPTION_FIELD_TO_CONCAT] ?? null;
+        $postfix = $options[AnonymizeInterface::FIELD_OPTION_POSTFIX] ?? null;
+        $isPasswordField = $options[AnonymizeInterface::FIELD_OPTION_IS_PASSWORD] ?? false;
+        $concatFieldName = $options[AnonymizeInterface::FIELD_OPTION_CONCAT_FIELD_NAME] ?? false;
 
         if (null !== $value) {
             $concatParts = [
@@ -165,5 +178,23 @@ class StepAnonymizeTablesData
         $result = "UPDATE `{$tableName}` SET {$columnExpressionsStr}";
 
         return $result;
+    }
+
+    /**
+     * @param array $options
+     * @return void
+     * @throws InvalidConfigException
+     */
+    private function validateOptionNamesWithException(array $options): void
+    {
+        $allowedOptions = AnonymizeInterface::FIELD_OPTIONS;
+        $incorrectOptions = array_diff($options, $allowedOptions);
+
+        if (count($incorrectOptions) > 0) {
+            $incorrectOptionsStr = implode(', ', $incorrectOptions);
+            $error = "The following config fields are not supported: {$incorrectOptionsStr}";
+
+            throw new InvalidConfigException($error);
+        }
     }
 }
