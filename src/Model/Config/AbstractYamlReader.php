@@ -102,7 +102,7 @@ abstract class AbstractYamlReader
      * @param string $path
      * @return array
      */
-    protected function parseYamlFile(string $path): array
+    private function parseYamlFile(string $path): array
     {
         $result = Yaml::parseFile($path);
 
@@ -110,23 +110,29 @@ abstract class AbstractYamlReader
     }
 
     /**
-     * @param array $config1
-     * @param array $config2
+     * @param array $baseConfig
+     * @param array $envConfig
      * @return array
      */
-    private function mergeConfigs(array $config1, array $config2): array
+    private function mergeConfigs(array $baseConfig, array $envConfig): array
     {
-        $result = $config1;
+        $result = [];
 
-        foreach ($config2 as $key => &$value) { // TODO
-            if ((true === is_array($value)) && isset($result[$key]) && is_array($result[$key])) {
-                $result[$key] = $this->mergeConfigs($result[$key], $value);
-            } elseif (is_numeric($key)) {
-                if (false === in_array($value, $result)) {
-                    $result[] = $value;
+        foreach ($envConfig as $key => $envValue) {
+            $baseValue = $baseConfig[$key] ?? null;
+            $isEnvValueComplex = (true === is_array($envValue));
+            $isBaseValueComplex = (true === is_array($baseValue));
+
+            if ((true === $isEnvValueComplex) && (true === $isBaseValueComplex)) {
+                $result[$key] = $this->mergeConfigs($baseValue, $envValue);
+            } elseif (true === is_numeric($key)) {
+                $notSetInBase = (false === in_array($envValue, $baseConfig));
+
+                if (true === $notSetInBase) {
+                    $result[] = $envValue;
                 }
             } else {
-                $result[$key] = $value;
+                $result[$key] = $envValue;
             }
         }
 
