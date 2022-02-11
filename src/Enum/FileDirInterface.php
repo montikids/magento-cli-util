@@ -18,6 +18,12 @@ interface FileDirInterface
     public const DIR_MAGENTO_ROOT = MK_MAGENTO_ROOT;
 
     /**
+     * Magento paths
+     */
+    public const DIR_MAGENTO_APP = self::DIR_MAGENTO_ROOT . '/app';
+    public const DIR_MAGENTO_APP_ETC = self::DIR_MAGENTO_APP . '/etc';
+
+    /**
      * Package paths
      */
     public const DIR_PKG_ROOT = self::DIR_BIN . '/..';
@@ -32,7 +38,11 @@ interface FileDirInterface
     public const DIR_UTIL_CONFIG_ANONYMIZE = self::DIR_UTIL_CONFIG . '/anonymize';
     public const DIR_UTIL_CONFIG_STORE_CONFIG = self::DIR_UTIL_CONFIG . '/store-config';
 
+    /**
+     * Some important file names
+     */
     public const FILE_NAME_CONFIG_BASE = 'base.yml';
     public const FILE_NAME_GITIGNORE_SAMPLE = '.gitignore_sample';
     public const FILE_NAME_GITIGNORE = '.gitignore';
+    public const FILE_NAME_ENV = 'env.php';
 }
