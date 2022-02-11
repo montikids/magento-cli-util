@@ -22,6 +22,7 @@ interface FileDirInterface
      */
     public const DIR_MAGENTO_APP = self::DIR_MAGENTO_ROOT . '/app';
     public const DIR_MAGENTO_APP_ETC = self::DIR_MAGENTO_APP . '/etc';
+    public const DIR_VENDOR_BIN = self::DIR_VENDOR_ROOT . '/bin';
 
     /**
      * Package paths

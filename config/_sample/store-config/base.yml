@@ -1,6 +1,7 @@
 config:
   default:
     0:
+      ### Security ###
       admin/security/password_lifetime: 9000
 
       ### HTTPS ###
@@ -26,7 +27,7 @@ config:
       design/head/includes: ''
 
 sql_query:
-  clean_report: 'DELETE FROM reporting_users'
+  clean_report: 'DELETE FROM reporting_users;'
 
 n98_magerun2_command:
-  cache_clean: 'cache:clean'
+  cache_flush: 'cache:flush'

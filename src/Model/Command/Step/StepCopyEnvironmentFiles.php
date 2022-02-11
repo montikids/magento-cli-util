@@ -158,15 +158,15 @@ class StepCopyEnvironmentFiles
      */
     private function printCopyResult(string $destinationPath, bool $isUnderVcs, OutputInterface $output): void
     {
-        $relativePath = $this->filesystem->makePathRelative($destinationPath, FileDirInterface::DIR_MAGENTO_ROOT);
-        $relativePath = rtrim($relativePath, '/');
+        $relativePath = $this->getRelativePath($destinationPath);
 
-        $this->printPrimary("- CREATED/UPDATED: ($relativePath)", $output);
+        $this->printPrimary("- CREATED/UPDATED: {$relativePath}", $output);
 
         if (true === $isUnderVcs) {
-            $this->printSecondary("Don't forget to add the file to the repository!", $output);
+            $this->printSecondary("Don't forget to commit the file to your repository!", $output);
         } else {
-            $this->printSecondary("Is ignored by VCS by default. Feel free to change it.", $output);
+            $this->printError("It's only a sample, don't forget to modify it!", $output);
+            $this->printSecondary("Also, it's ignored by VCS by default. Feel free to change it.", $output);
         }
 
         $this->printSeparatorSmall($output);
@@ -179,10 +179,21 @@ class StepCopyEnvironmentFiles
      */
     private function printSkipResult(string $destinationPath, OutputInterface $output): void
     {
-        $relativePath = $this->filesystem->makePathRelative($destinationPath, FileDirInterface::DIR_MAGENTO_ROOT);
-        $relativePath = rtrim($relativePath, '/');
+        $relativePath = $this->getRelativePath($destinationPath);
 
-        $this->printSecondary("- SKIPPED (already exists): ($relativePath)", $output);
+        $this->printSecondary("- SKIPPED (already exists): {$relativePath}", $output);
         $this->printSeparatorSmall($output);
+    }
+
+    /**
+     * @param string $destinationPath
+     * @return string
+     */
+    private function getRelativePath(string $destinationPath): string
+    {
+        $result = $this->filesystem->makePathRelative($destinationPath, FileDirInterface::DIR_MAGENTO_ROOT);
+        $result = rtrim($result, '/');
+
+        return $result;
     }
 }

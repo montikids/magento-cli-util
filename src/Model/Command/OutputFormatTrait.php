@@ -90,11 +90,13 @@ trait OutputFormatTrait
     {
         if (true === $output->isVerbose()) {
             $error = "{$exception->getMessage()}. File: {$exception->getFile()}. Line: {$exception->getLine()}.";
-            $error .= "Trace: {$exception->getTraceAsString()}";
+            $trace = "Trace: {$exception->getTraceAsString()}";
+
+            $this->printError($error, $output);
+            $this->printError($trace, $output);
         } else {
             $error = $exception->getMessage();
+            $this->printError($error, $output);
         }
-
-        $this->printError($error, $output);
     }
 }
