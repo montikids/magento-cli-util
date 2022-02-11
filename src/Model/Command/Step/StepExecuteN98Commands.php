@@ -43,13 +43,17 @@ class StepExecuteN98Commands
             $this->printTitle('Running N98 Magerun 2 commands...', $output);
 
             foreach ($commandsToExecute as $command) {
-                if (false === empty($command)) {
-                    $this->printPrimary("- Running '{$command}'", $output);
+                $skipCommand = (null === $command);
 
-                    if (true === $output->isVerbose()) {
-                        $executionResult = $this->n98->execute($command);
-                        $this->printSecondary("{$executionResult}", $output);
-                    }
+                if (true === $skipCommand) {
+                    continue;
+                }
+
+                $this->printPrimary("- Running '{$command}'", $output);
+
+                if (true === $output->isVerbose()) {
+                    $executionResult = $this->n98->execute($command);
+                    $this->printSecondary("{$executionResult}", $output);
                 }
             }
         } else {

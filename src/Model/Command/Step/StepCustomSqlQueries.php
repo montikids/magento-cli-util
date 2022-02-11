@@ -31,13 +31,22 @@ class StepCustomSqlQueries
             $connection = Connection::getInstance();
 
             foreach ($customQueries as $query) {
+                $skipQuery = (null === $query);
+
+                if (true === $skipQuery) {
+                    continue;
+                }
+
                 $this->printPrimary("- {$query}", $output);
 
                 $connection->query($query);
-                $affectedRows = $connection->affectedRows();
 
-                $this->printSecondary("Affected {$affectedRows} rows", $output);
-                $this->printSeparatorSmall($output);
+                if (true === $output->isVerbose()) {
+                    $affectedRows = $connection->affectedRows();
+
+                    $this->printSecondary("Affected {$affectedRows} rows", $output);
+                    $this->printSeparatorSmall($output);
+                }
             }
         } else {
             if (true === $output->isVerbose()) {
