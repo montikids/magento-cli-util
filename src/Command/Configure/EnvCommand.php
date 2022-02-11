@@ -88,7 +88,7 @@ class EnvCommand extends AbstractCommand
             $envType = $input->getArgument(self::ARGUMENT_ENV);
 
             $this->validateEnvWithException($envType);
-//            $this->setEnvironment->execute($envType, $output); TODO
+            $this->setEnvironment->execute($envType, $output);
             $this->copyFiles->execute($envType, $output);
         } catch (\Throwable $t) {
             $result = static::RESULT_CODE_ERROR;
