@@ -122,7 +122,7 @@ class StepAnonymizeTablesData
     {
         $this->validateOptionNamesWithException(array_keys($options));
 
-        $value = $options[AnonymizeInterface::FIELD_OPTION_VALUE] ?? null;
+        $value = $options[AnonymizeInterface::FIELD_OPTION_VALUE] ?? '';
         $fieldToConcat = $options[AnonymizeInterface::FILED_OPTION_FIELD_TO_CONCAT] ?? null;
         $postfix = $options[AnonymizeInterface::FIELD_OPTION_POSTFIX] ?? null;
         $isPasswordField = $options[AnonymizeInterface::FIELD_OPTION_IS_PASSWORD] ?? false;
