@@ -116,7 +116,7 @@ abstract class AbstractYamlReader
      */
     private function mergeConfigs(array $baseConfig, array $envConfig): array
     {
-        $result = [];
+        $result = $baseConfig;
 
         foreach ($envConfig as $key => $envValue) {
             $baseValue = $baseConfig[$key] ?? null;
