@@ -1,18 +1,21 @@
+### Config for your personal use, should be excluded from VCS
+###
+
 # Variables are local to this config
-# You can't override base config variables
+# You can't override base/env config variables
 variables:
   - &customer_password 'my_awesome_password'
-  - &mail_domain '@test.com'
+  - &mail_domain '@local.com'
 
+# Non-specified tables are inherited from the base/env config
 tables:
-  # You can override any table specified in the base config
-  # Non-specified tables are inherited from the base config
+  # You can override any table specified in the base/env  config
   customer_entity:
     # You can override any field
-    # Non-specified fields are inherited from the base config
+    # Non-specified fields are inherited from the base/env  config
     firstname:
       # You can override any field option
-      # Non-specified options are inherited from the base config
+      # Non-specified options are inherited from the base/env config
       value: 'John '
       field_to_concat: 'entity_id'
     # You can't override variables, but you can override field options that use variables
@@ -36,18 +39,13 @@ tables:
   sales_order_grid: null
   sales_shipment_grid: null
 
-# Non-specified queries are inherited from the base config
+# Non-specified queries are inherited from the base/env config
 sql_query:
-  # You can add any custom comSQL query you want executed
-  truncate_queue_message_status: 'TRUNCATE queue_message_status;'
-  truncate_queue_message: 'DELETE FROM queue_message;'
   # You can cancel any custom SQL query specified in the base config by setting it to null
   truncate_reporting_users: null
 
-# Non-specified commands are inherited from the base config
+# Non-specified commands are inherited from the base/env config
 n98_magerun2_command:
-  # You can add any custom command you want executed
-  cache_flush: 'cache:flush'
   # You can cancel running any command specified in the base config by setting it to null
-  cache_clean: null
+  reindex: null
 

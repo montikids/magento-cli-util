@@ -1,38 +1,30 @@
+### Config for your personal use, should be excluded from VCS
+###
+
+# Non-specified values are inherited from the base and env configs
 config:
   default:
     0:
-      ### Base ###
+      # You probably would like to customize the base URL and all the related values
       web/unsecure/base_url: 'http://magento.test/'
       web/secure/base_url: 'https://magento.test/'
+      admin/url/custom: 'https://magento.test/'
 
-      ### Mail ###
-      smtp/developer/developer_mode: '0'
-      smtp/configuration_option/host: 'localhost'
-      smtp/configuration_option/port: '1025'
-      smtp/configuration_option/protocol:
-        delete: true
-      smtp/configuration_option/username:
-        delete: true
-      smtp/configuration_option/password:
-        delete: true
-      smtp/configuration_option/authentication:
-        delete: true
+      # If you use HTTPS locally, otherwise, set to '0'
       web/secure/use_in_frontend: '1'
       web/secure/use_in_adminhtml: '1'
 
-      ### Admin ###
-      admin/url/custom: 'https://montikids.test/'
-      admin/url/use_custom: '1'
-      admin/url/use_custom_path: '0'
-      admin/security/password_lifetime: ''
-      admin/security/password_is_forced: '0'
-
   stores:
-    0:
-      web/secure/base_url:
-        delete: true
-      web/unsecure/base_url:
-        delete: true
+    1:
+      # That's how to avoid setting values that were specified in the base/env config
+      general/store_information/name:
+        skip: true
 
-sql_query:
-  clean_report: 'DELETE FROM reporting_users'
+# Set the whole section to null if you want to skip all the queries specified in the base/env config
+# If you don't need any customizations, just omit the section
+sql_query: null
+
+# Set the whole section to null if you want to skip all the commands specified in the base/env config
+# But you probably need at least the cache flushing command, right?..
+# If you don't need any customizations, just omit the section
+n98_magerun2_command: null

@@ -1,0 +1,45 @@
+###
+# Can be used to specify set of rules for all the developers
+###
+config:
+  default:
+    0:
+      # Let's mitigate security politics for developers machines
+      admin/security/password_lifetime: ''
+      admin/security/session_lifetime: 31536000
+      admin/security/password_is_forced: '0'
+
+      # In case the most developers don't use HTTPS locally
+      web/secure/use_in_frontend:
+        delete: true
+      web/secure/use_in_adminhtml:
+        delete: true
+
+      # You probably don't want sending data to NewRelic from developers machines
+      newrelicreporting/general/enable: '0'
+      newrelicreporting/cron/enable_cron: '0'
+      newrelicreporting/general/account_id:
+        delete: true
+      newrelicreporting/general/app_id:
+        delete: true
+      newrelicreporting/general/api:
+        delete: true
+      newrelicreporting/general/insights_insert_key:
+        delete: true
+
+      # Enable some payment methods handy to use on development
+      payment/checkmo/active: '1'
+
+# Non-specified queries are inherited from the base config
+sql_query:
+  # You can add any custom SQL query you want executed
+  truncate_wishlist: 'TRUNCATE wishlist;'
+  # You can cancel any custom SQL query specified in the base config by setting it to null
+  clean_report: null
+
+# Non-specified commands are inherited from the base config
+n98_magerun2_command:
+  # You can add any custom command you want executed
+  cache_flush: 'cache:flush'
+  # You can cancel running any command specified in the base config by setting it to null
+  cache_clean: null
