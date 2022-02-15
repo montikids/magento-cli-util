@@ -35,7 +35,7 @@ interface FileDirInterface
 
     public const DIR_UTIL_ROOT = self::DIR_MAGENTO_ROOT . '/mk-cli-util';
     public const DIR_UTIL_CONFIG = self::DIR_UTIL_ROOT . '/config';
-    public const DIR_UTIL_CONFIG_SAMPLE = self::DIR_UTIL_CONFIG . '/sample';
+    public const DIR_UTIL_CONFIG_SAMPLE = self::DIR_UTIL_CONFIG . '/_sample';
     public const DIR_UTIL_CONFIG_ANONYMIZE = self::DIR_UTIL_CONFIG . '/anonymize';
     public const DIR_UTIL_CONFIG_STORE_CONFIG = self::DIR_UTIL_CONFIG . '/store-config';
 
@@ -43,6 +43,7 @@ interface FileDirInterface
      * Some important file names
      */
     public const FILE_NAME_CONFIG_BASE = 'base.yml';
+    public const FILE_NAME_CONFIG_LOCAL = 'local.yml';
     public const FILE_NAME_GITIGNORE_SAMPLE = '.gitignore_sample';
     public const FILE_NAME_GITIGNORE = '.gitignore';
     public const FILE_NAME_ENV = 'env.php';

@@ -12,12 +12,10 @@ interface EnvFileInterface
 {
     public const FILE_PATH = FileDirInterface::DIR_MAGENTO_APP_ETC . '/' . FileDirInterface::FILE_NAME_ENV;
 
-    public const MK_CLI_UTIL_ENVIRONMENT_LOCAL = 'local';
     public const MK_CLI_UTIL_ENVIRONMENT_DEV = 'dev';
     public const MK_CLI_UTIL_ENVIRONMENT_STAGE = 'stage';
 
     public const MK_CLI_UTIL_ENVIRONMENT_ALLOWED_VALUES = [
-        self::MK_CLI_UTIL_ENVIRONMENT_LOCAL,
         self::MK_CLI_UTIL_ENVIRONMENT_DEV,
         self::MK_CLI_UTIL_ENVIRONMENT_STAGE,
     ];
