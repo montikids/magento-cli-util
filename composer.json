@@ -1,6 +1,7 @@
 {
     "name": "montikids/magento-cli-util",
     "description": "Symfony-based CLI tool for Magento developers",
+    "homepage": "https://github.com/montikids/magento-cli-util",
     "keywords": [
         "Magento 2",
         "cli",
@@ -28,7 +29,7 @@
         }
     ],
     "require": {
-        "php": ">=7.2.0",
+        "php": "^7.3||^8.0",
         "ext-sodium": "*",
         "ext-mysqli": "*",
         "symfony/console": ">4.0",
