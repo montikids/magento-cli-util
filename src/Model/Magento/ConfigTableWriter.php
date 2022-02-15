@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Montikids\MagentoCliUtil\Model\Magento;
 
+use Montikids\MagentoCliUtil\Enum\Magento\EnvFileInterface;
 use Montikids\MagentoCliUtil\Model\Db\Connection;
 
 /**
@@ -22,6 +23,19 @@ class ConfigTableWriter
     private const FIELD_NAME_SCOPE = 'scope';
     private const FIELD_NAME_SCOPE_ID = 'scope_id';
     private const FIELD_NAME_VALUE = 'value';
+
+    /**
+     * @var EnvFileReader
+     */
+    private $envFileReader;
+
+    /**
+     * Configure dependencies
+     */
+    public function __construct()
+    {
+        $this->envFileReader = new EnvFileReader();
+    }
 
     /**
      * @param string $path
@@ -77,13 +91,12 @@ class ConfigTableWriter
     }
 
     /**
-     * TODO: Take into account possible Magento table prefix
-     *
      * @return string
      */
     private function getTableName(): string
     {
-        $result = self::TABLE_NAME;
+        $tablePrefix = $this->envFileReader->readStringValue(EnvFileInterface::DB_TABLE_PREFIX);
+        $result = $tablePrefix . self::TABLE_NAME;
 
         return $result;
     }

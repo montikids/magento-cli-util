@@ -4,9 +4,11 @@ declare(strict_types=1);
 namespace Montikids\MagentoCliUtil\Model\Command\Step;
 
 use Montikids\MagentoCliUtil\Enum\Config\AnonymizeInterface;
+use Montikids\MagentoCliUtil\Enum\Magento\EnvFileInterface;
 use Montikids\MagentoCliUtil\Exception\InvalidConfigException;
 use Montikids\MagentoCliUtil\Model\Command\OutputFormatTrait;
 use Montikids\MagentoCliUtil\Model\Db\Connection;
+use Montikids\MagentoCliUtil\Model\Magento\EnvFileReader;
 use Montikids\MagentoCliUtil\Model\Magento\ValueEncryptor;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -23,10 +25,16 @@ class StepAnonymizeTablesData
     private $configValueEnc;
 
     /**
+     * @var EnvFileReader
+     */
+    private $envFileReader;
+
+    /**
      * Configure dependencies
      */
     public function __construct()
     {
+        $this->envFileReader = new EnvFileReader();
         $this->configValueEnc = new ValueEncryptor();
     }
 
@@ -74,6 +82,7 @@ class StepAnonymizeTablesData
     private function prepareTableQueries(array $tables): array
     {
         $result = [];
+        $tablePrefix = $this->envFileReader->readStringValue(EnvFileInterface::DB_TABLE_PREFIX);
 
         foreach ($tables as $tableName => $columns) {
             $skipTable = (null === $columns);
@@ -82,9 +91,10 @@ class StepAnonymizeTablesData
                 continue;
             }
 
+            $fullTableName = "{$tablePrefix}{$tableName}";
             $columnExpressions = $this->prepareColumnExpression($columns);
             $tableUpdateSql = $this->prepareTableUpdateSql($tableName, $columnExpressions);
-            $result[$tableName] = $tableUpdateSql;
+            $result[$fullTableName] = $tableUpdateSql;
         }
 
         return $result;

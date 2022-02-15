@@ -23,6 +23,7 @@ interface EnvFileInterface
     ];
 
     public const CRYPT_KEY = 'crypt.key';
+    public const DB_TABLE_PREFIX = 'db.table_prefix';
     public const DB_CONNECTION_DEFAULT_HOST = 'db.connection.default.host';
     public const DB_CONNECTION_DEFAULT_USERNAME = 'db.connection.default.username';
     public const DB_CONNECTION_DEFAULT_PASSWORD = 'db.connection.default.password';
