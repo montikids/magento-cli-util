@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Montikids\MagentoCliUtil\Model\Config;
 
-use Montikids\MagentoCliUtil\Enum\Config\StoreConfigInterface;
 use Montikids\MagentoCliUtil\Enum\FileDirInterface;
 use Symfony\Component\Yaml\Yaml;
 
@@ -26,7 +25,8 @@ abstract class AbstractYamlReader
     protected const CONFIG_SECTIONS = null;
 
     /**
-     * Returns environment config merged with the base one
+     * Returns environment config merged with the base and the local ones
+     * Config values priority is: local > env > base
      *
      * @param string $environment
      * @return array
@@ -35,8 +35,10 @@ abstract class AbstractYamlReader
     {
         $baseConfig = $this->readBaseConfig();
         $envConfig = $this->readEnvConfig($environment);
+        $localConfig = $this->readLocalConfig();
 
         $result = $this->mergeConfigs($baseConfig, $envConfig);
+        $result = $this->mergeConfigs($result, $localConfig);
 
         return $result;
     }
@@ -46,48 +48,90 @@ abstract class AbstractYamlReader
      *
      * @return array
      */
-    public function readBaseConfig(): array
+    private function readBaseConfig(): array
     {
-        $configPath = $this->getConfigPath(null);
+        $configPath = $this->getConfigPathForFile(FileDirInterface::FILE_NAME_CONFIG_BASE);
         $result = $this->parseYamlFile($configPath);
 
-        foreach (StoreConfigInterface::ROOT_SECTIONS as $sectionName) {
-            $result[$sectionName] = $result[$sectionName] ?? [];
+        foreach (static::CONFIG_SECTIONS as $sectionName) {
+            if (false === array_key_exists($sectionName, $result)) {
+                $result[$sectionName] = [];
+            }
         }
 
         return $result;
     }
 
     /**
-     * Reads config for the specified environment which can be absent
+     * Reads the local config that is optional
      *
-     * @param string $environment
      * @return array
      */
-    public function readEnvConfig(string $environment): array
+    private function readLocalConfig(): array
     {
         $result = [];
-
-        $configPath = $this->getConfigPath($environment);
+        $configPath = $this->getConfigPathForFile(FileDirInterface::FILE_NAME_CONFIG_LOCAL);
 
         if (true === is_file($configPath)) {
             $result = $this->parseYamlFile($configPath);
         }
 
-        foreach (StoreConfigInterface::ROOT_SECTIONS as $sectionName) {
-            $result[$sectionName] = $result[$sectionName] ?? [];
+        foreach (static::CONFIG_SECTIONS as $sectionName) {
+            if (false === array_key_exists($sectionName, $result)) {
+                $result[$sectionName] = [];
+            }
         }
 
         return $result;
     }
 
     /**
-     * @param string|null $scopeName
+     * Reads config for the specified environment that is optional
+     *
+     * @param string $environment
+     * @return array
+     */
+    private function readEnvConfig(string $environment): array
+    {
+        $result = [];
+        $configPath = $this->getEnvConfigPath($environment);
+
+        if (true === is_file($configPath)) {
+            $result = $this->parseYamlFile($configPath);
+        }
+
+        foreach (static::CONFIG_SECTIONS as $sectionName) {
+            if (false === array_key_exists($sectionName, $result)) {
+                $result[$sectionName] = [];
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param string $scopeName
      * @return string
      */
-    protected function getConfigPath(?string $scopeName): string
+    private function getEnvConfigPath(string $scopeName): string
     {
-        $fileName = (null !== $scopeName) ? "{$scopeName}.yml" : FileDirInterface::FILE_NAME_CONFIG_BASE;
+        $fileName = "{$scopeName}.yml";
+        $pathParts = [
+            static::CONFIG_DIR_PATH,
+            $fileName,
+        ];
+
+        $result = implode('/', $pathParts);
+
+        return $result;
+    }
+
+    /**
+     * @param string $fileName
+     * @return string
+     */
+    private function getConfigPathForFile(string $fileName): string
+    {
         $pathParts = [
             static::CONFIG_DIR_PATH,
             $fileName,
