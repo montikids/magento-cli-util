@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8c4f88ef16c9efc9d371003341e588ae",
+    "content-hash": "1076f879c6ec4aeb37e63b87064aff08",
     "packages": [
         {
             "name": "n98/magerun2-dist",
@@ -2527,7 +2527,7 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": ">=7.2.0",
+        "php": "^7.3||^8.0",
         "ext-sodium": "*",
         "ext-mysqli": "*"
     },
