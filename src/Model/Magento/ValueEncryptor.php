@@ -102,7 +102,7 @@ class ValueEncryptor
     private function getCryptKeys(): array
     {
         if (null === $this->cachedKeys) {
-            $keysStr = $this->n98->execute(N98CommandInterface::CONFIG_ENV_SHOW, [EnvFileInterface::CRYPT_KEY]);
+            $keysStr = $this->n98->execute(N98CommandInterface::CONFIG_ENV_SHOW, [EnvFileInterface::PATH_CRYPT_KEY]);
             $keysStr = trim((string)$keysStr);
             $this->cachedKeys  = preg_split('/\s+/s', $keysStr);
         }

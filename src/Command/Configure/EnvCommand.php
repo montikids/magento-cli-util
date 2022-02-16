@@ -53,8 +53,11 @@ class EnvCommand extends AbstractCommand
      */
     protected function getHelpInformation(): string
     {
-        $result = 'Required to apply different environment configuration profiles.';
-        $result .= ' And prohibition of execution on the production environment';
+        $result = <<<TEXT
+        You have to select an enviroment type you're going to use. It allows to load the corresponding config file and
+        to avoid applying incorrect values or running non-expected commands.
+        The command also copies config samples and pre-creates configs (if not exist yet) for the specified environment.
+        TEXT;
 
         return $result;
     }
@@ -66,7 +69,7 @@ class EnvCommand extends AbstractCommand
     {
         parent::configure();
 
-        $allowedEnvs = implode(', ', EnvFileInterface::MK_CLI_UTIL_ENVIRONMENT_ALLOWED_VALUES);
+        $allowedEnvs = implode(', ', EnvFileInterface::ALLOWED_VALUES_MK_CLI_UTIL_ENVIRONMENT);
         $this->addArgument(
             static::ARGUMENT_ENV,
             InputArgument::REQUIRED,

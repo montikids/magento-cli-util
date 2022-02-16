@@ -44,7 +44,7 @@ class StepSetEnvironment
      */
     public function execute(string $envToSet, OutputInterface $output): void
     {
-        $configPath = EnvFileInterface::MK_CLI_UTIL_ENVIRONMENT;
+        $configPath = EnvFileInterface::PATH_MK_CLI_UTIL_ENVIRONMENT;
         $filePath = $this->getRelativePath(EnvFileInterface::FILE_PATH);
 
         $this->printTitle("Setting environment variable ('{$configPath}' => '{$filePath}')...", $output);

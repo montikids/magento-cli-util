@@ -12,7 +12,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * TODO
+ * Abstract CLI tool command that contains the most common logic
  */
 abstract class AbstractCommand extends Command
 {
@@ -31,22 +31,19 @@ abstract class AbstractCommand extends Command
     public const DESCRIPTION = null;
 
     /**
-     * Path to the set environment value path in the etc/config/env.php file
-     * @var string
+     * Exit codes
      */
-    public const ENV_CONFIG_PATH_ENVIRONMENT = 'mk_cli_util.environment';
-
-
     protected const RESULT_CODE_SUCCESS = 0;
     protected const RESULT_CODE_ERROR = 0;
-
 
     /**
      * @var EnvFileReader
      */
     protected $envFileReader;
 
-
+    /**
+     * Configure dependencies
+     */
     public function __construct()
     {
         parent::__construct();
@@ -101,7 +98,7 @@ abstract class AbstractCommand extends Command
      */
     protected function getConfiguredEnvironmentType(): string
     {
-        $setValue = $this->envFileReader->readStringValue(self::ENV_CONFIG_PATH_ENVIRONMENT);
+        $setValue = $this->envFileReader->readStringValue(EnvFileInterface::PATH_MK_CLI_UTIL_ENVIRONMENT);
 
         if ('' === $setValue) {
             $error = 'Environment is not configured yet. Run ' . EnvCommand::NAME . ' command first.';
@@ -109,7 +106,7 @@ abstract class AbstractCommand extends Command
             $error = sprintf(
                 'Your configured an unsupported environment type. Please check %s (%s). Allowed environments: (%s).',
                 EnvFileInterface::FILE_PATH,
-                EnvFileInterface::MK_CLI_UTIL_ENVIRONMENT,
+                EnvFileInterface::PATH_MK_CLI_UTIL_ENVIRONMENT,
                 $this->getAllowedEnvsString()
             );
         } else {
@@ -146,7 +143,7 @@ abstract class AbstractCommand extends Command
      */
     protected function validateEnv(string $envType): bool
     {
-        $result = in_array($envType, EnvFileInterface::MK_CLI_UTIL_ENVIRONMENT_ALLOWED_VALUES);
+        $result = in_array($envType, EnvFileInterface::ALLOWED_VALUES_MK_CLI_UTIL_ENVIRONMENT);
 
         return $result;
     }
@@ -156,7 +153,7 @@ abstract class AbstractCommand extends Command
      */
     protected function getAllowedEnvsString(): string
     {
-        $allowedEnvs = EnvFileInterface::MK_CLI_UTIL_ENVIRONMENT_ALLOWED_VALUES;
+        $allowedEnvs = EnvFileInterface::ALLOWED_VALUES_MK_CLI_UTIL_ENVIRONMENT;
         $result = implode(', ', $allowedEnvs);
 
         return $result;

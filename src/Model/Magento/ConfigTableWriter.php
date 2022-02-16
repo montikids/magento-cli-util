@@ -95,7 +95,7 @@ class ConfigTableWriter
      */
     private function getTableName(): string
     {
-        $tablePrefix = $this->envFileReader->readStringValue(EnvFileInterface::DB_TABLE_PREFIX);
+        $tablePrefix = $this->envFileReader->readStringValue(EnvFileInterface::PATH_DB_TABLE_PREFIX);
         $result = $tablePrefix . self::TABLE_NAME;
 
         return $result;

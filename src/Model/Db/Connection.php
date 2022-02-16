@@ -156,10 +156,10 @@ class Connection
      */
     private function establishConnection(): void
     {
-        $host = $this->envFileReader->readStringValue(EnvFileInterface::DB_CONNECTION_DEFAULT_HOST);
-        $user = $this->envFileReader->readStringValue(EnvFileInterface::DB_CONNECTION_DEFAULT_USERNAME);
-        $password = $this->envFileReader->readStringValue(EnvFileInterface::DB_CONNECTION_DEFAULT_PASSWORD);
-        $dbName = $this->envFileReader->readStringValue(EnvFileInterface::DB_CONNECTION_DEFAULT_DBNAME);
+        $host = $this->envFileReader->readStringValue(EnvFileInterface::PATH_DB_CONNECTION_DEFAULT_HOST);
+        $user = $this->envFileReader->readStringValue(EnvFileInterface::PATH_DB_CONNECTION_DEFAULT_USERNAME);
+        $password = $this->envFileReader->readStringValue(EnvFileInterface::PATH_DB_CONNECTION_DEFAULT_PASSWORD);
+        $dbName = $this->envFileReader->readStringValue(EnvFileInterface::PATH_DB_CONNECTION_DEFAULT_DBNAME);
 
         if ((null === $host) || (null === $user) || (null === $dbName)) {
             $this->processSettingsReadError();
