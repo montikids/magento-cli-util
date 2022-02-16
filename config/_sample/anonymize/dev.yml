@@ -36,4 +36,4 @@ sql_query:
 # Non-specified commands are inherited from the base config
 n98_magerun2_command:
   # You can add any custom command you want executed
-  generate_urn: 'dev:urn-catalog:generate'
+  generate_urn: 'dev:urn-catalog:generate .idea/misc.xml'
