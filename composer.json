@@ -1,5 +1,5 @@
 {
-    "name": "montikids/cli-magento-configure",
+    "name": "montikids/magento-cli-util",
     "description": "Magento CLI UTIL",
     "type": "magento2-component",
     "require": {
