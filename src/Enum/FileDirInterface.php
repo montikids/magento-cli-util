@@ -46,5 +46,6 @@ interface FileDirInterface
     public const FILE_NAME_CONFIG_LOCAL = 'local.yml';
     public const FILE_NAME_GITIGNORE_SAMPLE = '.gitignore_sample';
     public const FILE_NAME_GITIGNORE = '.gitignore';
+    public const FILE_NAME_README = 'README.md';
     public const FILE_NAME_ENV = 'env.php';
 }

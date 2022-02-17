@@ -61,6 +61,8 @@ class StepCopyEnvironmentFiles
         $samplesDst = FileDirInterface::DIR_UTIL_CONFIG_SAMPLE;
         $gitIgnoreSrc = FileDirInterface::DIR_PKG_CONFIG . '/' . FileDirInterface::FILE_NAME_GITIGNORE_SAMPLE;
         $gitIgnoreDst = FileDirInterface::DIR_UTIL_CONFIG . '/' . FileDirInterface::FILE_NAME_GITIGNORE;
+        $readmeSrc = FileDirInterface::DIR_PKG_ROOT . '/' . FileDirInterface::FILE_NAME_README;
+        $readmeDst = FileDirInterface::DIR_UTIL_ROOT . '/' . FileDirInterface::FILE_NAME_README;
 
         $baseConfig1Src = sprintf(
             '%s/%s',
@@ -110,6 +112,9 @@ class StepCopyEnvironmentFiles
         $this->printCopyResult($samplesDst, false, $output);
 
         $this->copyFileIfNotExist($gitIgnoreSrc, $gitIgnoreDst, true, $output);
+
+        $this->filesystem->copy($readmeSrc, $readmeDst);
+        $this->printCopyResult($readmeDst, false, $output);
 
         if (true === $this->copyFileIfNotExist($baseConfig1Src, $baseConfig1Dst, true, $output)) {
             $this->newConfigs[] = $baseConfig1Dst;
