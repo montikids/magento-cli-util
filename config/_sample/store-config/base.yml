@@ -29,12 +29,6 @@ config:
       admin/security/password_lifetime: '9000'
       admin/security/session_lifetime: '9000'
 
-      ### HTTPS ###
-      web/secure/use_in_frontend:
-        delete: true
-      web/secure/use_in_adminhtml:
-        delete: true
-
       ### Mail ###
       system/smtp/disable: '1'
       system/smtp/host:
