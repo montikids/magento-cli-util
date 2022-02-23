@@ -1,0 +1,22 @@
+# For detailed examples see the dev.yml and local.yml config samples
+variables:
+  - &customer_password '%^7sdfsd$%&7686!4w34++'
+  - &mail_domain '@stage.com'
+
+tables:
+  customer_entity:
+    firstname:
+      value: 'John '
+      field_to_concat: 'entity_id'
+    email:
+      postfix: *mail_domain
+    password_hash:
+      value: *customer_password
+
+sql_query:
+  truncate_queue_message_status: 'TRUNCATE queue_message_status;'
+  truncate_queue_message: 'DELETE FROM queue_message;'
+  truncate_reporting_users: null
+
+n98_magerun2_command:
+  recreate_triggers: 'index:trigger:recreate'

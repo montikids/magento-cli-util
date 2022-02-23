@@ -1,0 +1,39 @@
+### Config for all developers, should be under VCS
+###
+
+# Variables are local to this config
+# You can't override the base config variables
+variables:
+  - &customer_password 'my_awesome_password'
+  - &mail_domain '@test.com'
+
+# Non-specified tables are inherited from the base config
+tables:
+  # You can override any table specified in the base config
+  # Non-specified tables are inherited from the base config
+  customer_entity:
+    # You can override any field
+    # Non-specified fields are inherited from the base config
+    firstname:
+      # You can override any field option
+      # Non-specified options are inherited from the base config
+      value: 'John '
+      field_to_concat: 'entity_id'
+    # You can't override variables, but you can override field options that use variables
+    email:
+      postfix: *mail_domain
+    password_hash:
+      value: *customer_password
+    lastname:
+      value: 'Doe'
+
+# Non-specified queries are inherited from the base config
+sql_query:
+  # You can add any custom SQL query you want executed
+  truncate_queue_message_status: 'TRUNCATE queue_message_status;'
+  clean_queue_message: 'DELETE FROM queue_message;'
+
+# Non-specified commands are inherited from the base config
+n98_magerun2_command:
+  # You can add any custom command you want executed
+  generate_urn: 'dev:urn-catalog:generate .idea/misc.xml'

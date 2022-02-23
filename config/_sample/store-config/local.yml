@@ -1,0 +1,30 @@
+### Config for your personal use, should be excluded from VCS
+###
+
+# Non-specified values are inherited from the base and env configs
+config:
+  default:
+    0:
+      # You probably would like to customize the base URL and all the related values
+      web/unsecure/base_url: 'http://magento.test/'
+      web/secure/base_url: 'https://magento.test/'
+      admin/url/custom: 'https://magento.test/'
+
+      # If you use HTTPS locally, otherwise, set to '0'
+      web/secure/use_in_frontend: '1'
+      web/secure/use_in_adminhtml: '1'
+
+  stores:
+    1:
+      # That's how to avoid setting values that were specified in the base/env config
+      general/store_information/name:
+        skip: true
+
+# Set the whole section to null if you want to skip all the queries specified in the base/env config
+# If you don't need any customizations, just omit the section
+sql_query: null
+
+# Set the whole section to null if you want to skip all the commands specified in the base/env config
+# But you probably need at least the cache flushing command, right?..
+# If you don't need any customizations, just omit the section
+n98_magerun2_command: null

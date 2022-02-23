@@ -1,5 +1,4 @@
 /vendor/
-configs/storeConfigData/local.yml
 /.idea/
-/configs/anonymize/base.yml
 /.DS_Store
+/.php-cs-fixer.cache

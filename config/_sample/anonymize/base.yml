@@ -1,0 +1,309 @@
+### Variables
+# You can use variables to avoid dummy copy-pasting some things and to simplify customizing values per environment and
+# team members
+###
+variables:
+  - &mail_domain '@trash-mail.com'
+  - &customer_password 'Password123'
+  - &customer_phone '1234 5678'
+  - &customer_fax '1234 5678'
+  - &customer_street ' test avenue'
+  - &ip '0.0.0.0'
+
+### Anonymize patterns for specific table
+# ---
+# Section structure
+# ---
+# tables:
+#   {{table_name}}
+#     {{field_name}}
+#       value: {{option_value}}
+#       field_to_concat: {{option_value}}
+#       postfix: {{option_value}}
+#       is_password: {{option_value}}
+#       concat_field_name: {{option_value}}
+#
+# ---
+# Field options
+# ---
+# value – (string|null|'') – column main value or prefix, if you concat it with either another field value, postfix, or both
+#  - use an empty string if you either want to clean the field or you don't need any prefix
+#  - null value sets the field to NULL, field_to_concat and postfix ignored
+# field_to_concat – (string|null) – another field name in the same table that you want to be concatenated to the primary value
+#  - null value means you don't want to concat any fields
+# postfix – (string|null) – some value you want being at the end of the field value
+#  - null value means you don't want to concat any fields
+# is_password – (bool) – treat the field as password: value is encrypted in the same way as customer password is
+# concat_field_name – (bool) – set to true if you want to concat name of the table field to the end of the value (after postfix)
+#
+# ---
+# Default values
+# ---
+# value: ''
+# field_to_concat: null
+# postfix: null
+# is_password: false
+# concat_field_name: false
+###
+tables:
+  customer_entity:
+    firstname:
+      value: 'firstname_'
+      field_to_concat: 'entity_id'
+    lastname:
+      value: 'firstname_'
+      field_to_concat: 'entity_id'
+    email:
+      value: 'dev_'
+      field_to_concat: 'entity_id'
+      postfix: *mail_domain
+    password_hash:
+      value: *customer_password
+      is_password: true
+
+  customer_address_entity:
+    firstname:
+      value: 'firstname_'
+      field_to_concat: 'entity_id'
+    lastname:
+      value: 'lastname_'
+      field_to_concat: 'entity_id'
+    street:
+      value: *customer_street
+      field_to_concat: 'entity_id'
+    city:
+      value: 'city_'
+      field_to_concat: 'entity_id'
+    telephone:
+      value: *customer_phone
+      field_to_concat: 'entity_id'
+    fax:
+      value: *customer_fax
+      field_to_concat: 'entity_id'
+
+  customer_grid_flat:
+    name:
+      value: 'name_'
+      field_to_concat: 'entity_id'
+    email:
+      value: 'dev_'
+      field_to_concat: 'entity_id'
+      postfix: *mail_domain
+    shipping_full:
+      value: 'shipping_full_'
+      field_to_concat: 'entity_id'
+    billing_full:
+      value: 'billing_full_'
+      field_to_concat: 'entity_id'
+    billing_firstname:
+      value: 'billing_firstname_'
+      field_to_concat: 'entity_id'
+    billing_lastname:
+      value: 'billing_lastname_'
+      field_to_concat: 'entity_id'
+    billing_telephone:
+      value: *customer_phone
+      field_to_concat: 'entity_id'
+    billing_street:
+      value: *customer_street
+      field_to_concat: 'entity_id'
+    billing_city:
+      value: 'billing_city_'
+      field_to_concat: 'entity_id'
+    billing_company:
+      value: 'billing_company_'
+      field_to_concat: 'entity_id'
+
+  email_contact:
+    email:
+      value: 'dev_'
+      field_to_concat: 'email_contact_id'
+      postfix: *mail_domain
+
+  newsletter_subscriber:
+    subscriber_email:
+      value: 'dev_'
+      field_to_concat: 'subscriber_id'
+      postfix: *mail_domain
+
+  quote:
+    customer_email:
+      value: 'dev_'
+      field_to_concat: 'entity_id'
+      postfix: *mail_domain
+    customer_firstname:
+      value: 'customer_firstname_'
+      field_to_concat: 'entity_id'
+    customer_lastname:
+      value: 'customer_lastname_'
+      field_to_concat: 'entity_id'
+    remote_ip:
+      value: *ip
+
+  quote_address:
+    email:
+      value: 'dev_'
+      field_to_concat: 'address_id'
+      postfix: *mail_domain
+    firstname:
+      value: 'firstname_'
+      field_to_concat: 'address_id'
+    lastname:
+      value: 'lastname_'
+      field_to_concat: 'address_id'
+    company:
+      value: 'company_'
+      field_to_concat: 'address_id'
+    street:
+      value: *customer_street
+      field_to_concat: 'address_id'
+    city:
+      value: 'city_'
+      field_to_concat: 'address_id'
+    telephone:
+      value: *customer_phone
+      field_to_concat: 'address_id'
+    fax:
+      value: *customer_fax
+      field_to_concat: 'address_id'
+
+  sales_creditmemo_grid:
+    billing_name:
+      value: 'billing_name_'
+      field_to_concat: 'entity_id'
+    billing_address:
+      value: 'billing_address_'
+      field_to_concat: 'entity_id'
+    shipping_address:
+      value: 'shipping_address_'
+      field_to_concat: 'entity_id'
+    customer_name:
+      value: 'customer_name_'
+      field_to_concat: 'entity_id'
+    customer_email:
+      value: 'dev_'
+      field_to_concat: 'entity_id'
+      postfix: *mail_domain
+
+  sales_invoice_grid:
+    billing_name:
+      value: 'billing_name_'
+      field_to_concat: 'entity_id'
+    billing_address:
+      value: 'billing_address_'
+      field_to_concat: 'entity_id'
+    shipping_address:
+      value: 'shipping_address_'
+      field_to_concat: 'entity_id'
+    customer_name:
+      value: 'customer_name_'
+      field_to_concat: 'entity_id'
+    customer_email:
+      value: 'dev_'
+      field_to_concat: 'entity_id'
+      postfix: *mail_domain
+
+  sales_order:
+    customer_email:
+      value: 'dev_'
+      field_to_concat: 'entity_id'
+      postfix: *mail_domain
+    customer_firstname:
+      value: 'customer_firstname_'
+      field_to_concat: 'entity_id'
+    customer_lastname:
+      value: 'customer_lastname_'
+      field_to_concat: 'entity_id'
+
+  sales_order_address:
+    email:
+      value: 'dev_'
+      field_to_concat: 'entity_id'
+      postfix: *mail_domain
+    firstname:
+      value: 'firstname_'
+      field_to_concat: 'entity_id'
+    lastname:
+      value: 'lastname_'
+      field_to_concat: 'entity_id'
+    company:
+      value: 'company_'
+      field_to_concat: 'entity_id'
+    street:
+      value: *customer_street
+      field_to_concat: 'entity_id'
+    city:
+      value: 'city_'
+      field_to_concat: 'entity_id'
+    telephone:
+      value: *customer_phone
+      field_to_concat: 'entity_id'
+
+  sales_order_grid:
+    billing_name:
+      value: 'billing_name_'
+      field_to_concat: 'entity_id'
+    shipping_name:
+      value: 'shipping_name_'
+      field_to_concat: 'entity_id'
+    billing_address:
+      value: 'billing_address_'
+      field_to_concat: 'entity_id'
+    shipping_address:
+      value: 'shipping_address_'
+      field_to_concat: 'entity_id'
+    customer_name:
+      value: 'customer_name_'
+      field_to_concat: 'entity_id'
+    customer_email:
+      value: 'dev_'
+      field_to_concat: 'entity_id'
+      postfix: *mail_domain
+
+  sales_shipment_grid:
+    billing_name:
+      value: 'billing_name_'
+      field_to_concat: 'entity_id'
+    shipping_name:
+      value: 'shipping_name_'
+      field_to_concat: 'entity_id'
+    billing_address:
+      value: 'billing_address_'
+      field_to_concat: 'entity_id'
+    shipping_address:
+      value: 'shipping_address_'
+      field_to_concat: 'entity_id'
+    customer_name:
+      value: 'customer_name_'
+      field_to_concat: 'entity_id'
+    customer_email:
+      value: 'dev_'
+      field_to_concat: 'entity_id'
+      postfix: *mail_domain
+
+### Custom SQL queries
+# {{query_alias}}: {{SQL_query}} – add the query to execute
+# {{query_alias}}: null – skip executing the query defined in base/env config
+#
+# Set the whole section to null if you don't want to execute any query
+# If you don't need any customizations, just omit the section in your env/local config
+###
+sql_query:
+  clean_quote: 'DELETE FROM quote;'
+  truncate_cron_schedule: 'TRUNCATE cron_schedule;'
+  truncate_customer_visitor: 'TRUNCATE customer_visitor;'
+  truncate_admin_notice: "TRUNCATE adminnotification_inbox;"
+  truncate_reporting_users: "TRUNCATE reporting_users;"
+  truncate_reporting_orders: "TRUNCATE reporting_orders;"
+  truncate_reporting_module_status: "TRUNCATE reporting_module_status;"
+  truncate_reporting_system_updated: "TRUNCATE reporting_system_updates;"
+
+### N98 Magerun 2 util commands to run
+# {{command_alias}}: {{n98_command}} – add the command to execute
+# {{command_alias}}: null – skip executing the command defined in base/env config
+#
+# Set the whole section to null in your env/local if you don't want to execute any command
+# If you don't need any customizations, just omit the section in your env/local config
+###
+n98_magerun2_command:
+  reindex: 'indexer:reindex'
