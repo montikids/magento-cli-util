@@ -1,0 +1,67 @@
+### Config values to set/replace for the 'core_config_data' table
+# ---
+# Section structure
+# ---
+# config:
+#   {{scope_name}}:
+#     {{scope_id}}:
+#       {{path}}: {{value}}
+#       {{path}}:
+#         delete: true
+#       {{path}}:
+#         skip: true
+#
+# ---
+# Details
+# ---
+# scope_name – default, stores or websites
+# scope_id (int) – 0 for the 'default' scope, a store ID for the 'stores', and a website ID for 'websites'
+# path (string) – the 'path' field value of the 'core_config_data' table, e.g. 'general/store_information/city'
+# value (string or a special value) – can be either a string or a special option
+#   - to set boolean values use '0' and '1', Otherwise, you could get unexpected results.
+#   - use the 'delete: true' option to just remove the value from the table
+#   - use the 'skip: true' option to skip setting value if it's specified in the base config but you don't want it in your env config
+###
+config:
+  default:
+    0:
+      ### Security ###
+      admin/security/password_lifetime: '9000'
+      admin/security/session_lifetime: '9000'
+
+      ### Mail ###
+      system/smtp/disable: '1'
+      system/smtp/host:
+        delete: true
+      system/smtp/port:
+        delete: true
+
+  # That's how you can set values per store
+  stores:
+    1:
+      general/store_information/name: 'My store name (store-level)'
+
+  # You also can do this per website
+  websites:
+    1:
+      general/store_information/name: 'My store name (website-level)'
+
+### Custom SQL queries
+# {{query_alias}}: {{SQL_query}} – add the query to execute
+# {{query_alias}}: null – skip executing the query defined in base/env config
+#
+# Set the whole section to null if you don't want to execute any query
+# If you don't need any customizations, just omit the section in your env/local config
+###
+sql_query:
+  clean_report: 'DELETE FROM reporting_users;'
+
+### N98 Magerun 2 util commands to run
+# {{command_alias}}: {{n98_command}} – add the command to execute
+# {{command_alias}}: null – skip executing the command defined in base/env config
+#
+# Set the whole section to null in your env/local if you don't want to execute any command
+# If you don't need any customizations, just omit the section in your env/local config
+###
+n98_magerun2_command:
+  cache_flush: 'cache:flush'

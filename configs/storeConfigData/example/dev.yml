@@ -1,5 +1,0 @@
-config:
-  default:
-    0:
-      web/unsecure/base_url: 'http://dev.site.net/'
-      web/secure/base_url: 'https://dev.site.net/'

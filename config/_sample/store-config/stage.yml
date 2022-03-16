@@ -1,0 +1,37 @@
+# Non-specified values are inherited from the base config
+config:
+  default:
+    0:
+      # You probably would like to customize the base URL and all the related values
+      web/unsecure/base_url: 'http://my-staging.net/'
+      web/secure/base_url: 'https://my-staging.net/'
+      admin/url/custom: 'https://my-staging.net/'
+
+      # In most cases, you should apply strong security policies for eny environment available from external URL
+      admin/security/password_lifetime: '90'
+      admin/security/session_lifetime: '900'
+      admin/security/password_is_forced: '1'
+
+      # You probably have another NewRelic account for staging
+      newrelicreporting/general/enable: '1'
+      newrelicreporting/cron/enable_cron: '0'
+      newrelicreporting/general/account_id: 'YOUR_STAGING_ACCOUNT_ID'
+      newrelicreporting/general/app_id: 'YOUR_STAGING_APP_ID'
+
+      # There is an example how to set encrypted values, like API keys and passwords for integration services
+      newrelicreporting/general/api:
+        encrypt: 'YOUR_STAGING_KEY'
+
+# Non-specified queries are inherited from the base config
+sql_query:
+  # You can add any custom SQL query you want executed
+  truncate_wishlist: 'TRUNCATE wishlist;'
+  # You can cancel any custom SQL query specified in the base config by setting it to null
+  clean_report: null
+
+# Non-specified commands are inherited from the base config
+n98_magerun2_command:
+  # You can add any custom command you want executed
+  cache_flush: 'cache:flush'
+  # You can cancel running any command specified in the base config by setting it to null
+  cache_clean: null

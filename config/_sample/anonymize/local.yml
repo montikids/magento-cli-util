@@ -1,0 +1,51 @@
+### Config for your personal use, should be excluded from VCS
+###
+
+# Variables are local to this config
+# You can't override base/env config variables
+variables:
+  - &customer_password 'my_awesome_password'
+  - &mail_domain '@local.com'
+
+# Non-specified tables are inherited from the base/env config
+tables:
+  # You can override any table specified in the base/env  config
+  customer_entity:
+    # You can override any field
+    # Non-specified fields are inherited from the base/env  config
+    firstname:
+      # You can override any field option
+      # Non-specified options are inherited from the base/env config
+      value: 'John '
+      field_to_concat: 'entity_id'
+    # You can't override variables, but you can override field options that use variables
+    email:
+      postfix: *mail_domain
+    password_hash:
+      value: *customer_password
+    # You can cancel a field anonymization by setting it to null
+    lastname: null
+
+  # You can cancel the whole table anonymization by setting it to null
+  customer_address_entity: null
+  customer_grid_flat: null
+  email_contact: null
+  newsletter_subscriber: null
+  quote_address: null
+  sales_creditmemo_grid: null
+  sales_invoice_grid: null
+  sales_order: null
+  sales_order_address: null
+  sales_order_grid: null
+  sales_shipment_grid: null
+
+# Non-specified queries are inherited from the base/env config
+sql_query:
+  # You can cancel any custom SQL query specified in the base config by setting it to null
+  truncate_reporting_users: null
+
+# Non-specified commands are inherited from the base/env config
+n98_magerun2_command:
+  # You can cancel running any command specified in the base config by setting it to null
+  reindex: null
+
