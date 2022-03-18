@@ -54,10 +54,10 @@ class EnvCommand extends AbstractCommand
     protected function getHelpInformation(): string
     {
         $result = <<<TEXT
-        You have to select an enviroment type you're going to use. It allows to load the corresponding config file and
-        to avoid applying incorrect values or running non-expected commands.
-        The command also copies config samples and pre-creates configs (if not exist yet) for the specified environment.
-        TEXT;
+You have to select an enviroment type you're going to use. It allows to load the corresponding config file and
+to avoid applying incorrect values or running non-expected commands.
+The command also copies config samples and pre-creates configs (if not exist yet) for the specified environment.
+TEXT;
 
         return $result;
     }
