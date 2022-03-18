@@ -12,7 +12,7 @@
     ],
     "type": "magento2-component",
     "license": "MIT",
-    "version": "dev-1.0.0",
+    "version": "dev-1.0.2",
     "minimum-stability": "stable",
     "authors": [
         {
@@ -34,7 +34,7 @@
         "ext-mysqli": "*",
         "symfony/console": ">4.0",
         "symfony/yaml": ">3.3",
-        "n98/magerun2-dist": "^4.9",
+        "n98/magerun2-dist": "~4.7.0",
         "symfony/filesystem": "^4||^5.4"
     },
     "autoload": {

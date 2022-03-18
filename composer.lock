@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a14222d653789e372bdd68c1082dd933",
+    "content-hash": "aab75d8c2993a6bb9750a17f31c9a748",
     "packages": [
         {
             "name": "n98/magerun2-dist",
-            "version": "4.9.1",
+            "version": "4.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/netz98/n98-magerun2-dist.git",
-                "reference": "7ce0ae94378f9da452ff289ecbdff6a566428f62"
+                "reference": "d15ae3c6a4cba6a65f9bea1a8b07a95eeb9ee1f6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/netz98/n98-magerun2-dist/zipball/7ce0ae94378f9da452ff289ecbdff6a566428f62",
-                "reference": "7ce0ae94378f9da452ff289ecbdff6a566428f62",
+                "url": "https://api.github.com/repos/netz98/n98-magerun2-dist/zipball/d15ae3c6a4cba6a65f9bea1a8b07a95eeb9ee1f6",
+                "reference": "d15ae3c6a4cba6a65f9bea1a8b07a95eeb9ee1f6",
                 "shasum": ""
             },
             "require": {
@@ -42,7 +42,7 @@
                 "magento",
                 "magerun2"
             ],
-            "time": "2021-12-22T14:15:54+00:00"
+            "time": "2021-07-05T15:31:01+00:00"
         },
         {
             "name": "psr/container",
