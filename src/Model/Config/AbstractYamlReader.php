@@ -148,7 +148,7 @@ abstract class AbstractYamlReader
      */
     private function parseYamlFile(string $path): array
     {
-        $result = Yaml::parseFile($path);
+        $result = Yaml::parseFile($path) ?? [];
 
         return $result;
     }
