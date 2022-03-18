@@ -161,18 +161,18 @@ Config paths:
 
 #### Syntax
 ```bash
-vendor/bin/mk-cli-util db:anonymize
+vendor/bin/mk-cli-util db:apply-config
 ```
 
 #### Example
 Normal use
 ```bash
-vendor/bin/mk-cli-util db:anonymize
+vendor/bin/mk-cli-util db:apply-config
 ```
 
 For more verbosity (see SQL queries are executed, the number of affected rows, and so on)
 ```bash
-vendor/bin/mk-cli-util db:anonymize -v
+vendor/bin/mk-cli-util db:apply-config -v
 ```
 
 #### What does it do
