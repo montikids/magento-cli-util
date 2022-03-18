@@ -80,7 +80,7 @@ abstract class AbstractCommand extends Command
      */
     protected function wrapExecute(\Closure $execute, OutputInterface $output): int
     {
-        $result = static::SUCCESS;
+        $result = static::RESULT_CODE_SUCCESS;
 
         try {
             $execute();

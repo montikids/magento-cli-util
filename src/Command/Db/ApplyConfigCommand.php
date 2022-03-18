@@ -58,11 +58,11 @@ class ApplyConfigCommand extends AbstractCommand
     protected function getHelpInformation(): string
     {
         $result = <<<TEXT
-        Replaces the 'core_config_data' table values according to the corresponding config file.
-        Using the corresponding config sections you also can run any custom SQL queries and specific N98 Magerun util
-        commands afterward.
-        Check the README.md file, config examples, or the repository docs for more details.
-        TEXT;
+Replaces the 'core_config_data' table values according to the corresponding config file.
+Using the corresponding config sections you also can run any custom SQL queries and specific N98 Magerun util
+commands afterward.
+Check the README.md file, config examples, or the repository docs for more details.
+TEXT;
 
         return $result;
     }
