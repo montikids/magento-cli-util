@@ -12,7 +12,7 @@
     ],
     "type": "magento2-component",
     "license": "MIT",
-    "version": "dev-1.0.0",
+    "version": "dev-1.0.1",
     "minimum-stability": "stable",
     "authors": [
         {
