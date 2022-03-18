@@ -59,8 +59,8 @@ class StepCopyEnvironmentFiles
     {
         $samplesSrc = FileDirInterface::DIR_PKG_CONFIG_SAMPLE;
         $samplesDst = FileDirInterface::DIR_UTIL_CONFIG_SAMPLE;
-        $gitIgnoreSrc = FileDirInterface::DIR_PKG_CONFIG . '/' . FileDirInterface::FILE_NAME_GITIGNORE_SAMPLE;
-        $gitIgnoreDst = FileDirInterface::DIR_UTIL_CONFIG . '/' . FileDirInterface::FILE_NAME_GITIGNORE;
+        $gitIgnoreSrc = FileDirInterface::DIR_PKG_ROOT . '/' . FileDirInterface::FILE_NAME_GITIGNORE_SAMPLE;
+        $gitIgnoreDst = FileDirInterface::DIR_UTIL_ROOT . '/' . FileDirInterface::FILE_NAME_GITIGNORE;
         $readmeSrc = FileDirInterface::DIR_PKG_ROOT . '/' . FileDirInterface::FILE_NAME_README;
         $readmeDst = FileDirInterface::DIR_UTIL_ROOT . '/' . FileDirInterface::FILE_NAME_README;
 
