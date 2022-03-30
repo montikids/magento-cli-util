@@ -12,21 +12,21 @@ The util is based on the [Symfony Console](https://symfony.com/doc/current/compo
 ## Features
 - Using YAML configs to describe data sanitizing scenarios
 - Anonymizing sensitive customer data in Magento tables:
-    - emails
-    - names
-    - addresses
-    - etc.
+  - emails
+  - names
+  - addresses
+  - etc.
 - Replacing or deleting Magento store configuration values in the `core_config_data` table:
-    - API integration keys
-    - tracking services settings
-    - domain name
-    - etc.
+  - API integration keys
+  - tracking services settings
+  - domain name
+  - etc.
 - Running custom SQL queries as a part of the scenario
 - Running specified [N98 Magerun 2](https://github.com/netz98/n98-magerun2) tool commands or Magento CLI commands as a part of the scenario
 - Flexible configuration per environment:
-    - Use the base (`base.yml`) config to describe the most common parts
-    - Use an environment-specific (`dev.yml`, `stage.yml`) config to either describe additional rules or override ones specified in the base config
-    - Use the local config (`local.yml`) to cover your personal needs: add, customize or override any rules defined in the base and/or the environment config
+  - Use the base (`base.yml`) config to describe the most common parts
+  - Use an environment-specific (`dev.yml`, `stage.yml`) config to either describe additional rules or override ones specified in the base config
+  - Use the local config (`local.yml`) to cover your personal needs: add, customize or override any rules defined in the base and/or the environment config
 - Specifying the verbosity flag `-v` allows you to get more detailed output or error information
 
 ## Installation
@@ -168,18 +168,18 @@ Config paths:
 
 #### Syntax
 ```bash
-vendor/bin/mk-cli-util db:anonymize
+vendor/bin/mk-cli-util db:apply-config
 ```
 
 #### Example
 Normal use
 ```bash
-vendor/bin/mk-cli-util db:anonymize
+vendor/bin/mk-cli-util db:apply-config
 ```
 
 For more verbosity (see SQL queries are executed, the number of affected rows, and so on)
 ```bash
-vendor/bin/mk-cli-util db:anonymize -v
+vendor/bin/mk-cli-util db:apply-config -v
 ```
 
 #### What does it do
@@ -249,69 +249,69 @@ Base config
 
 #### Sections
 - `tables`
-    - required
-    - contains table names and rules for them that describe which columns should be processed and how
-    - the structure is the following
-      ```yaml
-      tables:
-        {{table_name}}
-          {{field_name}}
-            value: {{option_value}}
-            field_to_concat: {{option_value}}
-            postfix: {{option_value}}
-            is_password: {{option_value}}
-            concat_field_name: {{option_value}}
-  
-          {{field_name}}: null
-      ```
-        - `{{table_name}}` – is a valid table name in the Magento database without the table prefix (if there is one)
-        - `{{field_name}}` – is a valid field name of the table
-            - set the whole field to `null` to skip anonymization (makes sense when you override the value in a more specific config)
-        - `{{option_value}}` – depends on the option:
-            - `value`
-                - is a _string_ or _null_, the default value is `''`
-                - describes the column main value to replace with or the prefix, if you concatenate it with either another field value, postfix, or both
-                - can be an empty string
-                - if is set to _null_ the field would be set to `NULL` in the database, other field options are ignored
-            - `field_to_concat`
-                - is a valid table field name in the same table (_string_) or _null_, the default value is `null`
-                - the value of the specified field is concatenated to the `value`
-                - if is set to _null_, no field value is concatenated
-            - `postfix`
-                - is a _string_ or _null_, the default value is `null`
-                - some static string you want to be put after either `value` or `field_to_concat` (depending on the options values)
-                - if is set to _null_, no postfix is added
-            - `is_password`
-                - is a _boolean_ value, the default value is `false`
-                - for now, there is only one place where you can use this option – the `customer_entity` table
-                - when the option is set to `true`, the `value` is encrypted in the way Magento encrypts customer passwords, so you can use the specified password to login into a customer account
-                - when the option is set to `true`, `field_to_concat` and `postfix` are ignored
-            - `concat_field_name`
-                - is a _boolean_ value, the default value is `false`
-                - when it's set to `true`, the `{{field_name}}` is joined to the end of the result value as a static string
-                - the field name is joined after the `postfix`, `field_to_concat`, or `value`, depending on their settings
-                - I have no idea why someone would need it but here we are
-            - **any field option can be omitted, the default value is used then**
+  - required
+  - contains table names and rules for them that describe which columns should be processed and how
+  - the structure is the following 
+    ```yaml
+    tables:
+      {{table_name}}
+        {{field_name}}
+          value: {{option_value}}
+          field_to_concat: {{option_value}}
+          postfix: {{option_value}}
+          is_password: {{option_value}}
+          concat_field_name: {{option_value}}
+
+        {{field_name}}: null
+    ```
+    - `{{table_name}}` – is a valid table name in the Magento database without the table prefix (if there is one)
+    - `{{field_name}}` – is a valid field name of the table
+      - set the whole field to `null` to skip anonymization (makes sense when you override the value in a more specific config)
+    - `{{option_value}}` – depends on the option:
+      - `value`
+        - is a _string_ or _null_, the default value is `''`
+        - describes the column main value to replace with or the prefix, if you concatenate it with either another field value, postfix, or both
+        - can be an empty string
+        - if is set to _null_ the field would be set to `NULL` in the database, other field options are ignored
+      - `field_to_concat`
+        - is a valid table field name in the same table (_string_) or _null_, the default value is `null`
+        - the value of the specified field is concatenated to the `value`
+        - if is set to _null_, no field value is concatenated
+      - `postfix`
+        - is a _string_ or _null_, the default value is `null`
+        - some static string you want to be put after either `value` or `field_to_concat` (depending on the options values)
+        - if is set to _null_, no postfix is added
+      - `is_password`
+        - is a _boolean_ value, the default value is `false`
+        - for now, there is only one place where you can use this option – the `customer_entity` table
+        - when the option is set to `true`, the `value` is encrypted in the way Magento encrypts customer passwords, so you can use the specified password to login into a customer account
+        - when the option is set to `true`, `field_to_concat` and `postfix` are ignored
+      - `concat_field_name`
+        - is a _boolean_ value, the default value is `false`
+        - when it's set to `true`, the `{{field_name}}` is joined to the end of the result value as a static string
+        - the field name is joined after the `postfix`, `field_to_concat`, or `value`, depending on their settings
+        - I have no idea why someone would need it but here we are
+      - **any field option can be omitted, the default value is used then**
 
 - `sql_query`
-    - optional
-    - is a key-value set of custom SQL queries you want to be run after the `tables` section is processed
-    - the structure is the following
-      ```yaml
-      sql_query:
-        {{alias}}: {{query}}
-        {{alias}}: null
-      ```
-        - `{{alias}}`
-            - is as a _string_
-            - must be a valid YAML key (try to not use any special characters or spaces)
-            - stands for some meaningful name for the query
-        - `{{query}}`
-        - is a valid SQL query (_string_) or _null_
-        - that is run "as is", it means you _must_ specify the table prefix if you use it
-        - trailing semicolon is optional
-        - the `null` values means you want to skip running this query (makes sense when you override the value in a more specific config)
-    - **you can set the whole section to _null_ (`sql_query: null`) if you don't want any queries executed** (makes sense when you override the section in a more specific config)
+  - optional
+  - is a key-value set of custom SQL queries you want to be run after the `tables` section is processed
+  - the structure is the following
+    ```yaml
+    sql_query:
+      {{alias}}: {{query}}
+      {{alias}}: null
+    ```
+    - `{{alias}}`
+      - is as a _string_
+      - must be a valid YAML key (try to not use any special characters or spaces)
+      - stands for some meaningful name for the query
+    - `{{query}}`
+    - is a valid SQL query (_string_) or _null_
+    - that is run "as is", it means you _must_ specify the table prefix if you use it
+    - trailing semicolon is optional
+    - the `null` values means you want to skip running this query (makes sense when you override the value in a more specific config)
+  - **you can set the whole section to _null_ (`sql_query: null`) if you don't want any queries executed** (makes sense when you override the section in a more specific config)
 
 - `n98_magerun2_command`
 - optional
@@ -322,15 +322,15 @@ Base config
     {{alias}}: {{command}}
     {{alias}}: null
   ```
-    - `{{alias}}`
-        - is as a _string_
-        - must be a valid YAML key (try to not use any special characters or spaces)
-        - stands for some meaningful name for the command
-    - `{{command}}`
-        - is a valid [N98 Magerun 2](https://github.com/netz98/n98-magerun2) tool command (_string_) or _null_
-        - that is run "as is", it means you _must_ specify all the command arguments if there are some
-        - the `null` values means you want to skip running this command (makes sense when you override the value in a more specific config)
-    - **you can set the whole section to _null_ (`n98_magerun2_command: null`) if you don't want any commands executed** (makes sense when you override the section in a more specific config)
+  - `{{alias}}`
+    - is as a _string_
+    - must be a valid YAML key (try to not use any special characters or spaces)
+    - stands for some meaningful name for the command
+  - `{{command}}`
+    - is a valid [N98 Magerun 2](https://github.com/netz98/n98-magerun2) tool command (_string_) or _null_
+    - that is run "as is", it means you _must_ specify all the command arguments if there are some
+    - the `null` values means you want to skip running this command (makes sense when you override the value in a more specific config)
+  - **you can set the whole section to _null_ (`n98_magerun2_command: null`) if you don't want any commands executed** (makes sense when you override the section in a more specific config)
 
 #### Examples
 The following example demonstrates the general approch to writing the sections and how to use YAML anchors (variables). For more extended samples, please check [the corresponding folder](config/_sample/anonymize) in the repository.
@@ -563,78 +563,78 @@ Base config
 
 #### Sections
 - `config`
-    - required
-    - contains config paths (that represent the `path` field of the `core_config_data` table) and rules for them that describe how to process their values
-    - paths can be specified for the default scope, for any website, or for any store
-    - the structure is the following
-      ```yaml
-      config:
-        {{scope_name}}:
-          {{scope_id}}:
-            {{path}}: {{value}}
-            {{path}}:
-              encrypt: {{non_ecrypted_value}}
-            {{path}}:
-              delete: true
-            {{path}}:
-              skip: true
-      ```
-        - `{{scope_name}}` – is `default`, `websites`, or `stores`
-        - `{{scope_id}}` – is `0` for the `default` scope and a valid (existed) website or store ID for `websites` and `stores` correspondingly
-            - set the whole field to `null` to skip anonymization (makes sense when you override the value in a more specific config)
-        - `{{path}}` – the config value path, exactly it's specified in the `path` field of the `core_config_data` table
-        - `{{value}}`
-            - is a _string_ or a _special instruction_ (`delete: true`, `skip: true`)
-            - for boolean values use `'0'` and `'1'` instead of `false` and `true` correspondingly
-            - specify integer/float/whatever values as strings, e.g.: `'139'`, `'18.35'`, and so on
-            - `encrypt: {{non_ecrypted_value}}`
-                - is a special instruction that encrypts the `{{non_ecrypted_value}}` in the way Magento does it
-                - use it to set fields with type [obscure](https://devdocs.magento.com/guides/v2.4/config-guide/prod/config-reference-systemxml.html#field-type-reference), like passwords, API keys, and so on
-                - `{{non_ecrypted_value}}` – is a _string_ that stands for the password/API ket/whatever in a raw mode (before encryption)
-            - `delete: true`
-                - is a special instruction that removes the row with the specified path completely from the table
-                - you may need it in case you want to force using the most default value from `config.xml` or just to have the config value unset
-            - `skip: true`
-                - is a special instruction that allows skipping processing the path value (makes sense when you override the value in a more specific config)
+  - required
+  - contains config paths (that represent the `path` field of the `core_config_data` table) and rules for them that describe how to process their values
+  - paths can be specified for the default scope, for any website, or for any store
+  - the structure is the following
+    ```yaml
+    config:
+      {{scope_name}}:
+        {{scope_id}}:
+          {{path}}: {{value}}
+          {{path}}:
+            encrypt: {{non_ecrypted_value}}
+          {{path}}:
+            delete: true
+          {{path}}:
+            skip: true
+    ```
+    - `{{scope_name}}` – is `default`, `websites`, or `stores`
+    - `{{scope_id}}` – is `0` for the `default` scope and a valid (existed) website or store ID for `websites` and `stores` correspondingly
+      - set the whole field to `null` to skip anonymization (makes sense when you override the value in a more specific config)
+    - `{{path}}` – the config value path, exactly it's specified in the `path` field of the `core_config_data` table
+    - `{{value}}`
+      - is a _string_ or a _special instruction_ (`delete: true`, `skip: true`)
+      - for boolean values use `'0'` and `'1'` instead of `false` and `true` correspondingly
+      - specify integer/float/whatever values as strings, e.g.: `'139'`, `'18.35'`, and so on
+      - `encrypt: {{non_ecrypted_value}}`
+        - is a special instruction that encrypts the `{{non_ecrypted_value}}` in the way Magento does it
+        - use it to set fields with type [obscure](https://devdocs.magento.com/guides/v2.4/config-guide/prod/config-reference-systemxml.html#field-type-reference), like passwords, API keys, and so on
+        - `{{non_ecrypted_value}}` – is a _string_ that stands for the password/API ket/whatever in a raw mode (before encryption)
+      - `delete: true`
+        - is a special instruction that removes the row with the specified path completely from the table
+        - you may need it in case you want to force using the most default value from `config.xml` or just to have the config value unset
+      - `skip: true`
+        - is a special instruction that allows skipping processing the path value (makes sense when you override the value in a more specific config)
 
 - `sql_query`
-    - optional
-    - is a key-value set of custom SQL queries you want to be run after the `tables` section is processed
-    - the structure is the following
-      ```yaml
-      sql_query:
-        {{alias}}: {{query}}
-        {{alias}}: null
-      ```
-        - `{{alias}}`
-            - is as a _string_
-            - must be a valid YAML key (try to not use any special characters or spaces)
-            - stands for some meaningful name for the query
-        - `{{query}}`
-            - is a valid SQL query (_string_) or _null_
-            - that is run "as is", it means you _must_ specify the table prefix if you use it
-            - trailing semicolon is optional
-            - the `null` values means you want to skip running this query (makes sense when you override the value in a more specific config)
-        - **you can set the whole section to _null_ (`sql_query: null`) if you don't want any queries executed** (makes sense when you override the section in a more specific config)
+  - optional
+  - is a key-value set of custom SQL queries you want to be run after the `tables` section is processed
+  - the structure is the following
+    ```yaml
+    sql_query:
+      {{alias}}: {{query}}
+      {{alias}}: null
+    ```
+    - `{{alias}}`
+      - is as a _string_
+      - must be a valid YAML key (try to not use any special characters or spaces)
+      - stands for some meaningful name for the query
+    - `{{query}}`
+      - is a valid SQL query (_string_) or _null_
+      - that is run "as is", it means you _must_ specify the table prefix if you use it
+      - trailing semicolon is optional
+      - the `null` values means you want to skip running this query (makes sense when you override the value in a more specific config)
+    - **you can set the whole section to _null_ (`sql_query: null`) if you don't want any queries executed** (makes sense when you override the section in a more specific config)
 
 - `n98_magerun2_command`
-    - optional
-    - is a key-value set of [N98 Magerun 2](https://github.com/netz98/n98-magerun2) tool commands you want to be run after the `tables` section is processed
-    - the structure is the following
-      ```yaml
-      n98_magerun2_command:
-        {{alias}}: {{command}}
-        {{alias}}: null
-      ```
-        - `{{alias}}`
-            - is as a _string_
-            - must be valid YAML key (try to not use any special characters or spaces)
-            - stands for some meaningful name for the command
-        - `{{command}}`
-            - is a valid [N98 Magerun 2](https://github.com/netz98/n98-magerun2) tool command (_string_) or _null_
-            - that is run "as is", it means you _must_ specify all the command arguments if there are some
-            - the `null` values means you want to skip running this command (makes sense when you override the value in a more specific config)
-        - **you can set the whole section to _null_ (`n98_magerun2_command: null`) if you don't want any commands executed** (makes sense when you override the section in a more specific config)
+  - optional
+  - is a key-value set of [N98 Magerun 2](https://github.com/netz98/n98-magerun2) tool commands you want to be run after the `tables` section is processed
+  - the structure is the following
+    ```yaml
+    n98_magerun2_command:
+      {{alias}}: {{command}}
+      {{alias}}: null
+    ```
+    - `{{alias}}`
+      - is as a _string_
+      - must be valid YAML key (try to not use any special characters or spaces)
+      - stands for some meaningful name for the command
+    - `{{command}}`
+      - is a valid [N98 Magerun 2](https://github.com/netz98/n98-magerun2) tool command (_string_) or _null_
+      - that is run "as is", it means you _must_ specify all the command arguments if there are some
+      - the `null` values means you want to skip running this command (makes sense when you override the value in a more specific config)
+    - **you can set the whole section to _null_ (`n98_magerun2_command: null`) if you don't want any commands executed** (makes sense when you override the section in a more specific config)
 
 #### Examples
 The following example demonstrates the general approch to writing the sections. For more extended samples, please check [the corresponding folder](config/_sample/store-config) in the repository.
@@ -911,3 +911,5 @@ rm -rf vendor/montikids/magento-cli-util && rm -rf vendor/bin/mk-cli-util && com
 
 - [@novakivskiy](https://github.com/novakivskiy)
 - [@timoffmax](https://github.com/timoffmax)
+ 
+
