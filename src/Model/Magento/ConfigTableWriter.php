@@ -30,6 +30,11 @@ class ConfigTableWriter
     private $envFileReader;
 
     /**
+     * @var string|null
+     */
+    private $cacheTablePrefix;
+
+    /**
      * Configure dependencies
      */
     public function __construct()
@@ -95,9 +100,11 @@ class ConfigTableWriter
      */
     private function getTableName(): string
     {
-        $tablePrefix = $this->envFileReader->readStringValue(EnvFileInterface::PATH_DB_TABLE_PREFIX);
-        $result = $tablePrefix . self::TABLE_NAME;
+        if (null === $this->cacheTablePrefix) {
+            $tablePrefix = $this->envFileReader->readStringValue(EnvFileInterface::PATH_DB_TABLE_PREFIX);
+            $this->cacheTablePrefix = $tablePrefix . self::TABLE_NAME;
+        }
 
-        return $result;
+        return $this->cacheTablePrefix;
     }
 }
