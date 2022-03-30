@@ -75,6 +75,13 @@ See all the commands currently available
 vendor/bin/mk-cli-util list
 ```
 
+Available list of commands:
+```bash
+vendor/bin/mk-cli-util configure:env <env> #  Set the util environment type. Different environments use different config files.
+vendor/bin/mk-cli-util db:anonymize # Anonymize sensitive data in the Magento database
+vendor/bin/mk-cli-util db:apply-config  #  Update "core_config_data" Magento DB table with the config file values
+```
+
 
 ### Configure environment
 
@@ -539,6 +546,11 @@ n98_magerun2_command:
 
 ### Store config values config
 Contains rules of updating values of the `core_config_data` Magento table.
+
+#### Syntax
+```bash
+vendor/bin/mk-cli-util db:apply-config 
+```
 
 #### Paths
 Base config
