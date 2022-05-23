@@ -48,7 +48,7 @@ abstract class AbstractYamlReader
      *
      * @return array
      */
-    private function readBaseConfig(): array
+    public function readBaseConfig(): array
     {
         $configPath = $this->getConfigPathForFile(FileDirInterface::FILE_NAME_CONFIG_BASE);
         $result = $this->parseYamlFile($configPath);
@@ -67,7 +67,7 @@ abstract class AbstractYamlReader
      *
      * @return array
      */
-    private function readLocalConfig(): array
+    public function readLocalConfig(): array
     {
         $result = [];
         $configPath = $this->getConfigPathForFile(FileDirInterface::FILE_NAME_CONFIG_LOCAL);
@@ -91,7 +91,7 @@ abstract class AbstractYamlReader
      * @param string $environment
      * @return array
      */
-    private function readEnvConfig(string $environment): array
+    public function readEnvConfig(string $environment): array
     {
         $result = [];
         $configPath = $this->getEnvConfigPath($environment);

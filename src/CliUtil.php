@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Montikids\MagentoCliUtil;
 
 use Montikids\MagentoCliUtil\Command\Configure\EnvCommand;
+use Montikids\MagentoCliUtil\Command\Configure\VerifyCommand;
 use Montikids\MagentoCliUtil\Command\Db\AnonymizeCommand;
 use Montikids\MagentoCliUtil\Command\Db\ApplyConfigCommand;
 use Symfony\Component\Console\Application;
@@ -21,7 +22,7 @@ class CliUtil extends Application
     /**
      * @var string
      */
-    private const APP_VERSION = 'dev-1.0.0';
+    private const APP_VERSION = '1.0.7';
 
     /**
      * Customized constructor
@@ -49,5 +50,6 @@ class CliUtil extends Application
         $this->add(new ApplyConfigCommand());
         $this->add(new AnonymizeCommand());
         $this->add(new EnvCommand());
+        $this->add(new VerifyCommand());
     }
 }

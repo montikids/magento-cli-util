@@ -75,11 +75,16 @@ See all the commands currently available
 vendor/bin/mk-cli-util list
 ```
 
-Available list of commands:
+#### /List of available commands
 ```bash
-vendor/bin/mk-cli-util configure:env <env> #  Set the util environment type. Different environments use different config files.
-vendor/bin/mk-cli-util db:anonymize # Anonymize sensitive data in the Magento database
-vendor/bin/mk-cli-util db:apply-config  #  Update "core_config_data" Magento DB table with the config file values
+# Set the util environment type. Different environments use different config files.
+vendor/bin/mk-cli-util configure:env <env> 
+# Check configuration files are valid
+vendor/bin/mk-cli-util configure:verify <env> (optional) 
+# Anonymize sensitive data in the Magento database
+vendor/bin/mk-cli-util db:anonymize 
+# Update "core_config_data" Magento DB table with the config file values
+vendor/bin/mk-cli-util db:apply-config 
 ```
 
 
@@ -121,6 +126,47 @@ vendor/bin/mk-cli-util configure:env dev -v
 - Adding a `.gitignore` file inside the folder to exclude local configuration files
 
 > It's recommended to add the `mk-cli-util` folder to git in order to share configs across your team and have the ability to easily adjust the rules when a new feature creates some points to sanitize.
+
+
+### Verify environment configuration files
+
+#### Description
+You always can check whether your configuration files are valid. 
+It's extremely important in automated deployments when you rely on safe usage, 
+and you really don't want accidentally miss the step of data cleaning and anonymization.
+
+This command returns non-zero exit code in case of any failure. 
+In case you have configured pipelines in your git, you can just add execution of this command to the pipelines 
+and be aware about incorrect syntax of config even before merging it into master/develop. Pipelines are usually failed on any error occurred.   
+
+Otherwise, you need to verify the configs on deployment and, probably, fail the whole deployment when this check fails. 
+Depending on how your deployment processes are made, you might need to track the exit code of this command and stop
+the deployment process explicitly when the exit code is non-zero value.
+
+#### Syntax
+```bash
+vendor/bin/mk-cli-util configure:verify <env>
+```
+
+#### Example
+Check files for the current configured environment
+```bash
+vendor/bin/mk-cli-util configure:verify
+```
+
+Check files for another environment
+```bash
+vendor/bin/mk-cli-util configure:verify dev
+```
+
+#### What does it do
+- One by one it tries to load and parse the following configs
+  - Base (`base.yml`)
+  - Environment (`dev.yml` or `stage.yml`)
+  - Local (`local.yml`)
+  - Merged (base + environment + local)
+- Config files are checked for both operations: setting store config values and DB tables anonymization 
+- Non-required configs, such as local, are skipped if the config is absent
 
 
 ### Anonymize DB data

@@ -34,7 +34,7 @@ abstract class AbstractCommand extends Command
      * Exit codes
      */
     protected const RESULT_CODE_SUCCESS = 0;
-    protected const RESULT_CODE_ERROR = 0;
+    protected const RESULT_CODE_ERROR = 1;
 
     /**
      * @var EnvFileReader
