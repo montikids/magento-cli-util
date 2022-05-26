@@ -100,7 +100,7 @@ abstract class AbstractCommand extends Command
     {
         $setValue = $this->envFileReader->readStringValue(EnvFileInterface::PATH_MK_CLI_UTIL_ENVIRONMENT);
 
-        if ('' === $setValue) {
+        if (('' === $setValue) || (null === $setValue)) {
             $error = 'Environment is not configured yet. Run ' . EnvCommand::NAME . ' command first.';
         } elseif (false === $this->validateEnv($setValue)) {
             $error = sprintf(
