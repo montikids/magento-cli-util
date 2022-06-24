@@ -6,15 +6,25 @@ config:
   default:
     0:
       # You probably would like to customize the base URL and all the related values
-      web/unsecure/base_url: 'http://magento.test/'
-      web/secure/base_url: 'https://magento.test/'
-      admin/url/custom: 'https://magento.test/'
+      web/unsecure/base_url: 'http://montikids-docker.dev/'
+      web/secure/base_url: 'https://montikids-docker.dev/'
+      admin/url/custom: 'https://montikids-docker.dev/'
 
       # If you use HTTPS locally, otherwise, set to '0'
       web/secure/use_in_frontend: '1'
       web/secure/use_in_adminhtml: '1'
 
   stores:
+    0:
+      # You probably would like to customize the base URL and all the related values
+      web/unsecure/base_url: 'http://montikids-docker.dev/'
+      web/secure/base_url: 'https://montikids-docker.dev/'
+      admin/url/custom: 'https://montikids-docker.dev/'`
+
+      # If you use HTTPS locally, otherwise, set to '0'
+      web/secure/use_in_frontend: '1'
+      web/secure/use_in_adminhtml: '1'
+
     1:
       # That's how to avoid setting values that were specified in the base/env config
       general/store_information/name:
