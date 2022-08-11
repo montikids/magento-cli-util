@@ -19,7 +19,7 @@ config:
       # You probably would like to customize the base URL and all the related values
       web/unsecure/base_url: 'http://montikids-docker.dev/'
       web/secure/base_url: 'https://montikids-docker.dev/'
-      admin/url/custom: 'https://montikids-docker.dev/'`
+      admin/url/custom: 'https://montikids-docker.dev/'
 
       # If you use HTTPS locally, otherwise, set to '0'
       web/secure/use_in_frontend: '1'
