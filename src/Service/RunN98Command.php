@@ -24,7 +24,7 @@ class RunN98Command
     public function execute(string $command, array $arguments = []): ?string
     {
         $argumentsStr = implode(' ', $arguments);
-        $commandParts = [self::BINARY_PATH, $command, $argumentsStr];
+        $commandParts = [self::BINARY_PATH, $command, $argumentsStr, '--skip-root-check'];
         $strToExecute = trim(implode(' ', $commandParts));
         $result = (shell_exec($strToExecute) ?? null);
 

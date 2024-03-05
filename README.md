@@ -75,7 +75,7 @@ See all the commands currently available
 vendor/bin/mk-cli-util list
 ```
 
-#### /List of available commands
+#### List of available commands
 ```bash
 # Set the util environment type. Different environments use different config files.
 vendor/bin/mk-cli-util configure:env <env> 
