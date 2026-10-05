@@ -22,7 +22,7 @@ class CliUtil extends Application
     /**
      * @var string
      */
-    private const APP_VERSION = '1.0.9';
+    private const APP_VERSION = '1.0.10';
 
     /**
      * Customized constructor
