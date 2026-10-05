@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Montikids\MagentoCliUtil\Model\Command\Step;
 
 use Montikids\MagentoCliUtil\Enum\Config\AbstractYamlInterface;
+use Montikids\MagentoCliUtil\Exception\N98CommandException;
 use Montikids\MagentoCliUtil\Model\Command\OutputFormatTrait;
 use Montikids\MagentoCliUtil\Service\RunN98Command;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -33,7 +34,7 @@ class StepExecuteN98Commands
      * @param array<string, mixed> $config
      * @param OutputInterface $output
      * @return void
-     * @throws \InvalidArgumentException
+     * @throws N98CommandException
      */
     public function execute(array $config, OutputInterface $output): void
     {
@@ -51,9 +52,10 @@ class StepExecuteN98Commands
 
                 $this->printPrimary("- Running '{$command}'", $output);
 
-                if (true === $output->isVerbose()) {
-                    $executionResult = $this->n98->execute($command);
-                    $this->printSecondary("{$executionResult}", $output);
+                $executionResult = $this->n98->execute($command);
+
+                if ((true === $output->isVerbose()) && ('' !== trim($executionResult))) {
+                    $this->printSecondary($executionResult, $output);
                 }
             }
         } else {
