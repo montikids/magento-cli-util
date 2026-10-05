@@ -64,7 +64,7 @@ class Connection
 
     /**
      * @param string $sql
-     * @param array $params
+     * @param array<int, scalar|null|array<scalar|null>> $params Values to bind; nested arrays are flattened in order
      * @return void
      * @throws DatabaseException
      */
@@ -77,14 +77,14 @@ class Connection
         $this->query = $this->connection->prepare($sql);
 
         if (false !== $this->query) {
-            if (count($params) > 1) {
+            if (count($params) > 0) {
                 $types = '';
                 $args_ref = [];
 
                 foreach ($params as $k => &$arg) {
                     if (is_array($params[$k])) {
                         foreach ($params[$k] as $j => &$a) {
-                            $types .= $this->_getType($params[$k][$j]);
+                            $types .= $this->getType($params[$k][$j]);
                             $args_ref[] = &$a;
                         }
                     } else {
@@ -93,8 +93,11 @@ class Connection
                     }
                 }
 
-                array_unshift($args_ref, $types);
-                call_user_func_array([$this->query, 'bind_param'], $args_ref);
+                // Nested arrays may be empty, and bind_param() fails with no types
+                if ('' !== $types) {
+                    array_unshift($args_ref, $types);
+                    call_user_func_array([$this->query, 'bind_param'], $args_ref);
+                }
             }
 
             $this->query->execute();
@@ -196,9 +199,10 @@ class Connection
     }
 
     /**
+     * Returns the mysqli bind_param() type character for the value
+     *
      * @param mixed $var
      * @return string
-     * @deprecated Refactor
      */
     private function getType($var): string
     {

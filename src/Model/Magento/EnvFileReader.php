@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace Montikids\MagentoCliUtil\Model\Magento;
 
-use Montikids\MagentoCliUtil\Enum\N98CommandInterface;
-use Montikids\MagentoCliUtil\Service\RunN98Command;
+use Montikids\MagentoCliUtil\Enum\Magento\EnvFileInterface;
+use Montikids\MagentoCliUtil\Exception\InvalidConfigException;
 
 /**
  * Reads env.php Magento config file values
@@ -12,31 +12,28 @@ use Montikids\MagentoCliUtil\Service\RunN98Command;
 class EnvFileReader
 {
     /**
-     * @var RunN98Command
-     */
-    private $n98;
-
-    /**
-     * Initialize dependencies
-     */
-    public function __construct()
-    {
-        $this->n98 = new RunN98Command();
-    }
-
-    /**
+     * Returns a value by its dot-separated path (e.g. 'db.connection.default.host')
+     * Returns null if the path doesn't exist or points to a non-scalar value
+     *
      * @param string $path
      * @return string|null
-     * @throws \InvalidArgumentException
+     * @throws InvalidConfigException
      */
     public function readStringValue(string $path): ?string
     {
-        $result = null;
-        $value = $this->n98->execute(N98CommandInterface::CONFIG_ENV_SHOW, [$path]);
+        $value = $this->getEnvConfig();
 
-        if (null !== $value) {
-            $result = trim($value);
+        foreach (explode('.', $path) as $key) {
+            if ((false === is_array($value)) || (false === array_key_exists($key, $value))) {
+                $value = null;
+
+                break;
+            }
+
+            $value = $value[$key];
         }
+
+        $result = is_scalar($value) ? trim((string)$value) : null;
 
         return $result;
     }
@@ -44,6 +41,7 @@ class EnvFileReader
     /**
      * @param string $path
      * @return int|null
+     * @throws InvalidConfigException
      */
     public function readIntValue(string $path): ?int
     {
@@ -52,6 +50,26 @@ class EnvFileReader
 
         if (null !== $value) {
             $result = (int)$value;
+        }
+
+        return $result;
+    }
+
+    /**
+     * Reads the file every time because it can be changed during the execution (e.g. by N98 Magerun 2)
+     *
+     * @return array<string, mixed>
+     * @throws InvalidConfigException
+     */
+    private function getEnvConfig(): array
+    {
+        $filePath = EnvFileInterface::FILE_PATH;
+        $result = is_file($filePath) ? include $filePath : null;
+
+        if (false === is_array($result)) {
+            $error = "Unable to read the Magento config file: {$filePath}. Probably, Magento is not installed.";
+
+            throw new InvalidConfigException($error);
         }
 
         return $result;

@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Montikids\MagentoCliUtil\Model\Command\Step;
 
+use Composer\InstalledVersions;
 use Montikids\MagentoCliUtil\Enum\FileDirInterface;
 use Montikids\MagentoCliUtil\Model\Command\OutputFormatTrait;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -108,17 +109,13 @@ class StepCopyEnvironmentFiles
             FileDirInterface::FILE_NAME_CONFIG_LOCAL
         );
 
-        $this->filesystem->mirror($samplesSrc, $samplesDst, null, ['override' => true, 'copy_on_windows' => true]);
+        $this->filesystem->mirror($samplesSrc, $samplesDst, null, $this->getMirrorOptions());
         $this->printCopyResult($samplesDst, false, $output);
 
         $this->copyFileIfNotExist($gitIgnoreSrc, $gitIgnoreDst, true, $output);
 
         $this->filesystem->copy($readmeSrc, $readmeDst);
         $this->printCopyResult($readmeDst, false, $output);
-
-        if (true === $this->copyFileIfNotExist($baseConfig1Src, $baseConfig1Dst, true, $output)) {
-            $this->newConfigs[] = $baseConfig1Dst;
-        }
 
         if (true === $this->copyFileIfNotExist($baseConfig1Src, $baseConfig1Dst, true, $output)) {
             $this->newConfigs[] = $baseConfig1Dst;
@@ -135,6 +132,29 @@ class StepCopyEnvironmentFiles
         if (true === $this->copyFileIfNotExist($localConfig2Src, $localConfig2Dst, false, $output)) {
             $this->newConfigs[] = $localConfig2Dst;
         }
+    }
+
+    /**
+     * Options for copying files instead of symlinks (on any OS)
+     * Symfony Filesystem 8.1 deprecated the 'copy_on_windows' option in favor of 'follow_symlinks',
+     * older versions ignore 'follow_symlinks'
+     *
+     * @return array<string, bool>
+     */
+    private function getMirrorOptions(): array
+    {
+        $version = class_exists(InstalledVersions::class)
+            ? InstalledVersions::getVersion('symfony/filesystem')
+            : null;
+        $isFollowSymlinksSupported = (null !== $version) && version_compare($version, '8.1', '>=');
+        $followSymlinksOption = $isFollowSymlinksSupported ? 'follow_symlinks' : 'copy_on_windows';
+
+        $result = [
+            'override' => true,
+            $followSymlinksOption => true,
+        ];
+
+        return $result;
     }
 
     /**

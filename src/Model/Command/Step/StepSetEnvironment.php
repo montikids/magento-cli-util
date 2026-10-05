@@ -6,6 +6,7 @@ namespace Montikids\MagentoCliUtil\Model\Command\Step;
 use Montikids\MagentoCliUtil\Enum\FileDirInterface;
 use Montikids\MagentoCliUtil\Enum\Magento\EnvFileInterface;
 use Montikids\MagentoCliUtil\Enum\N98CommandInterface;
+use Montikids\MagentoCliUtil\Exception\N98CommandException;
 use Montikids\MagentoCliUtil\Model\Command\OutputFormatTrait;
 use Montikids\MagentoCliUtil\Service\RunN98Command;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -41,6 +42,7 @@ class StepSetEnvironment
      * @param string $envToSet
      * @param OutputInterface $output
      * @return void
+     * @throws N98CommandException
      */
     public function execute(string $envToSet, OutputInterface $output): void
     {
@@ -50,7 +52,10 @@ class StepSetEnvironment
         $this->printTitle("Setting environment variable ('{$configPath}' => '{$filePath}')...", $output);
 
         $executionResult = $this->n98->execute(N98CommandInterface::CONFIG_ENV_SET, [$configPath, $envToSet]);
-        $this->printPrimary($executionResult, $output);
+
+        if ('' !== trim($executionResult)) {
+            $this->printPrimary($executionResult, $output);
+        }
     }
 
     /**

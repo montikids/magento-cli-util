@@ -47,9 +47,18 @@ class CliUtil extends Application
      */
     private function registerCommands(): void
     {
-        $this->add(new ApplyConfigCommand());
-        $this->add(new AnonymizeCommand());
-        $this->add(new EnvCommand());
-        $this->add(new VerifyCommand());
+        $commands = [
+            new ApplyConfigCommand(),
+            new AnonymizeCommand(),
+            new EnvCommand(),
+            new VerifyCommand(),
+        ];
+
+        // Symfony Console 7.4 deprecated add() in favor of addCommand(), 8.0 removed add()
+        $method = method_exists($this, 'addCommand') ? 'addCommand' : 'add';
+
+        foreach ($commands as $command) {
+            $this->$method($command);
+        }
     }
 }

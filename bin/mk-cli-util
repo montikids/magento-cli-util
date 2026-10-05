@@ -9,8 +9,14 @@ if (!class_exists('Montikids\MagentoCliUtil\CliUtilBootstrap')) {
 use Montikids\MagentoCliUtil\CliUtilBootstrap;
 
 define('MK_CLI_UTIL_BIN_DIR', __DIR__);
-define('MK_VENDOR_ROOT', MK_CLI_UTIL_BIN_DIR . '/../../..');
+// __DIR__ is resolved through symlinks (e.g. a path repository),
+// so prefer the vendor dir passed by the Composer 2.2+ bin proxy
+define(
+    'MK_VENDOR_ROOT',
+    isset($GLOBALS['_composer_autoload_path'])
+        ? dirname($GLOBALS['_composer_autoload_path'])
+        : MK_CLI_UTIL_BIN_DIR . '/../../..'
+);
 define('MK_MAGENTO_ROOT', MK_VENDOR_ROOT . '/..');
 
-$app = CliUtilBootstrap::createAndRunApplication();
-$app->run();
+CliUtilBootstrap::createAndRunApplication();

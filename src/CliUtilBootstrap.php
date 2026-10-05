@@ -21,6 +21,9 @@ class CliUtilBootstrap
     ];
 
     /**
+     * Creates and runs the application
+     * Note: run() terminates the process with the command exit code unless auto exit is disabled
+     *
      * @return CliUtil
      * @throws ErrorException
      */
